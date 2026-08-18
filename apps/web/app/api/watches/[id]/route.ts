@@ -9,7 +9,7 @@ async function findOwned(id: string, ownerId: string | null) {
   if (!ownerId) return { error: "ownerId query param required", status: 400 as const };
   const watch = await prisma.watch.findUnique({ where: { id } });
   if (!watch || watch.ownerId !== ownerId) {
-    return { error: "watch not found", status: 404 as const };
+    return { error: "alert not found", status: 404 as const };
   }
   return { watch };
 }
@@ -43,7 +43,7 @@ export async function PATCH(
   // and its history would no longer describe it.
   if (source !== watch.source) {
     return Response.json(
-      { error: "A watch's source can't be changed. Delete it and make a new one." },
+      { error: "An alert's source can't be changed. Delete it and make a new one." },
       { status: 409 },
     );
   }

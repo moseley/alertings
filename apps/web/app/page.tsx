@@ -536,14 +536,14 @@ export default function Home() {
             body: JSON.stringify(payload),
           },
         );
-        setStatus("Watch updated");
+        setStatus("Alert updated");
       } else {
         await api("/api/watches", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ ownerId, ...payload }),
         });
-        setStatus("Watch created");
+        setStatus("Alert created");
         // Only clear the pickers after a create; an edit keeps its subject.
         setArtist(null);
         setArtistHits([]);
@@ -607,12 +607,12 @@ export default function Home() {
 
   const heading =
     sourceFilter === "all"
-      ? "All watches"
+      ? "Alertings"
       : sourceFilter === "weather"
-        ? "Weather watches"
+        ? "Weather alerts"
         : sourceFilter === "screen"
-          ? "Film & TV watches"
-          : "Music watches";
+          ? "Film & TV alerts"
+          : "Music alerts";
 
   function openBuilder() {
     setStatus("");
@@ -779,8 +779,8 @@ export default function Home() {
             {visibleWatches.length === 0 ? (
               <p className="text-[14px] text-muted">
                 {watches.length === 0
-                  ? "No watches yet."
-                  : `No ${sourceFilter} watches yet.`}
+                  ? "No alerts yet."
+                  : `No ${sourceFilter} alerts yet.`}
               </p>
             ) : (
               <div className="grid grid-cols-1 gap-3.5 md:grid-cols-2 xl:grid-cols-3">

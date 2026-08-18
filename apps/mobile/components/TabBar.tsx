@@ -5,7 +5,7 @@ import { colors, fonts } from "./theme";
 export type ListView = "watches" | "history" | "settings";
 
 const TABS: { view: ListView; label: string; icon: LucideIcon }[] = [
-  { view: "watches", label: "Watches", icon: Eye },
+  { view: "watches", label: "Alerts", icon: Eye },
   { view: "history", label: "History", icon: Bell },
   { view: "settings", label: "You", icon: User },
 ];

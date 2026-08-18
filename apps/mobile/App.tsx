@@ -662,10 +662,10 @@ export default function App() {
 
       if (editingId) {
         await updateWatch(editingId, ownerId, payload);
-        setStatus("Watch updated");
+        setStatus("Alert updated");
       } else {
         await createWatch({ ownerId, ...payload });
-        setStatus("Watch created");
+        setStatus("Alert created");
         // Only clear the pickers after a create; an edit keeps its subject.
         setArtist(null);
         setArtistHits([]);
@@ -718,7 +718,7 @@ export default function App() {
     sourceFilter === "all" ? watches : watches.filter((w) => w.source === sourceFilter);
 
   const heading =
-    listView === "watches" ? "Watches" : listView === "history" ? "History" : "You";
+    listView === "watches" ? "Alertings" : listView === "history" ? "History" : "You";
 
   /** Plain restatement of the rule being built. */
   function rulePreview(): string | null {
@@ -836,7 +836,7 @@ export default function App() {
 
             {visibleWatches.length === 0 ? (
               <Text style={styles.empty}>
-                {watches.length === 0 ? "No watches yet." : `No ${sourceFilter} watches yet.`}
+                {watches.length === 0 ? "No alerts yet." : `No ${sourceFilter} alerts yet.`}
               </Text>
             ) : (
               <View style={styles.cardList}>
@@ -1053,7 +1053,7 @@ export default function App() {
                           ? "Looking up…"
                           : locationText.trim().length < 2
                             ? "Type a city or zip code"
-                            : "No match yet — the closest one is used when you create the watch"}
+                            : "No match yet — the closest one is used when you create the alert"}
                       </Text>
                     )}
                   </View>
