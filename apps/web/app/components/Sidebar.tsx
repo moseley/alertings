@@ -68,7 +68,7 @@ export function Sidebar({
         className="mt-5 flex w-full items-center justify-center gap-2 rounded-control bg-accent px-4 py-2.5 text-[14px] font-semibold text-white transition-colors hover:bg-[#0c5740]"
       >
         <Plus size={16} />
-        New watch
+        New alert
       </button>
 
       <p className="mt-6 px-3 font-mono text-[10px] font-semibold uppercase tracking-[.09em] text-faint">

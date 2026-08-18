@@ -591,7 +591,7 @@ export function WatchForm(props: WatchFormProps) {
           Cancel
         </Button>
         <Button className="flex-1" onClick={onCreate} disabled={!canCreate} type="button">
-          {busy ? "Working…" : editing ? "Save changes" : "Create watch"}
+          {busy ? "Working…" : editing ? "Save changes" : "Create alert"}
         </Button>
       </div>
     </div>

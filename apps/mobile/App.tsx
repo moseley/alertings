@@ -16,6 +16,8 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Keyboard,
+  KeyboardAvoidingView,
   Linking,
   Modal,
   Platform,
@@ -767,7 +769,7 @@ export default function App() {
           {listView === "watches" && (
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="New watch"
+              accessibilityLabel="New alert"
               onPress={() => {
                 setStatus("");
                 setBuilderOpen(true);
@@ -930,413 +932,428 @@ export default function App() {
         transparent
         onRequestClose={closeBuilder}
       >
-        <Pressable style={styles.backdrop} onPress={closeBuilder} />
-        <View style={styles.sheet}>
-          <View style={styles.sheetHeader}>
-            <Text style={styles.sheetTitle}>{editingId ? "Edit watch" : "New watch"}</Text>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Close"
-              onPress={closeBuilder}
-              hitSlop={8}
-            >
-              <X size={20} color={colors.muted} />
-            </Pressable>
-          </View>
-
-          <ScrollView
-            contentContainerStyle={styles.sheetBody}
-            keyboardShouldPersistTaps="handled"
-          >
-            {/* Source picker */}
-            <View style={styles.sourceGrid}>
-              {(
-                [
-                  { value: "weather", label: "Weather", icon: CloudSun },
-                  { value: "music", label: "Music", icon: AudioLines },
-                  { value: "screen", label: "Film & TV", icon: Clapperboard },
-                ] as { value: Source; label: string; icon: typeof CloudSun }[]
-              ).map(({ value, label, icon: Icon }) => {
-                const selected = source === value;
-                return (
-                  <Pressable
-                    key={value}
-                    // Changing source turns it into a different watch, and its
-                    // history would no longer describe it. The API rejects it.
-                    disabled={Boolean(editingId)}
-                    onPress={() => setSource(value)}
-                    style={[
-                      styles.sourceTile,
-                      selected && styles.sourceTileSelected,
-                      Boolean(editingId) && !selected && styles.sourceTileLocked,
-                    ]}
-                  >
-                    <Icon size={17} color={selected ? colors.accent : colors.ink} />
-                    <Text style={[styles.sourceLabel, selected && styles.sourceLabelSelected]}>
-                      {label}
-                    </Text>
-                  </Pressable>
-                );
-              })}
+        {/* The footer holding Create/Save is a sibling of the scroll area, so
+            without this the keyboard covers it — the submit button was simply
+            unreachable while typing. */}
+        <KeyboardAvoidingView
+          style={styles.sheetLayer}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+        >
+          <Pressable style={styles.backdrop} onPress={closeBuilder} />
+          <View style={styles.sheet}>
+            <View style={styles.sheetHeader}>
+              <Text style={styles.sheetTitle}>{editingId ? "Edit alert" : "New alert"}</Text>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Close"
+                onPress={closeBuilder}
+                hitSlop={8}
+              >
+                <X size={20} color={colors.muted} />
+              </Pressable>
             </View>
 
-            {source === "weather" ? (
-              <>
-                <View style={styles.field}>
-                  <FieldLabel>Location</FieldLabel>
-                  <View style={styles.row}>
-                    <View style={styles.inputWithIcon}>
-                      <Search size={16} color={colors.faint} style={styles.inputIcon} />
-                      <TextField
-                        value={locationText}
-                        onChangeText={(text) => {
-                          userTypedRef.current = true;
-                          setLocationText(text);
-                          setLocationEdited(true);
-                        }}
-                        placeholder="City or zip code"
-                        style={styles.inputPadded}
-                      />
-                    </View>
+            <ScrollView
+              contentContainerStyle={styles.sheetBody}
+              keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="on-drag"
+            >
+              {/* Source picker */}
+              <View style={styles.sourceGrid}>
+                {(
+                  [
+                    { value: "weather", label: "Weather", icon: CloudSun },
+                    { value: "music", label: "Music", icon: AudioLines },
+                    { value: "screen", label: "Film & TV", icon: Clapperboard },
+                  ] as { value: Source; label: string; icon: typeof CloudSun }[]
+                ).map(({ value, label, icon: Icon }) => {
+                  const selected = source === value;
+                  return (
                     <Pressable
-                      accessibilityRole="button"
-                      accessibilityLabel="Use my location"
-                      onPress={() => useCurrentLocation({ explicit: true })}
-                      disabled={locating}
-                      style={styles.locateButton}
+                      key={value}
+                      // Changing source turns it into a different watch, and its
+                      // history would no longer describe it. The API rejects it.
+                      disabled={Boolean(editingId)}
+                      onPress={() => setSource(value)}
+                      style={[
+                        styles.sourceTile,
+                        selected && styles.sourceTileSelected,
+                        Boolean(editingId) && !selected && styles.sourceTileLocked,
+                      ]}
                     >
-                      {locating ? (
-                        <ActivityIndicator size="small" color={colors.muted} />
-                      ) : (
-                        <Crosshair size={17} color={colors.muted} />
-                      )}
+                      <Icon size={17} color={selected ? colors.accent : colors.ink} />
+                      <Text style={[styles.sourceLabel, selected && styles.sourceLabelSelected]}>
+                        {label}
+                      </Text>
                     </Pressable>
+                  );
+                })}
+              </View>
+
+              {source === "weather" ? (
+                <>
+                  <View style={styles.field}>
+                    <FieldLabel>Location</FieldLabel>
+                    <View style={styles.row}>
+                      <View style={styles.inputWithIcon}>
+                        <Search size={16} color={colors.faint} style={styles.inputIcon} />
+                        <TextField
+                          value={locationText}
+                          onChangeText={(text) => {
+                            userTypedRef.current = true;
+                            setLocationText(text);
+                            setLocationEdited(true);
+                          }}
+                          placeholder="City or zip code"
+                          returnKeyType="done"
+                          onSubmitEditing={Keyboard.dismiss}
+                          style={styles.inputPadded}
+                        />
+                      </View>
+                      <Pressable
+                        accessibilityRole="button"
+                        accessibilityLabel="Use my location"
+                        onPress={() => useCurrentLocation({ explicit: true })}
+                        disabled={locating}
+                        style={styles.locateButton}
+                      >
+                        {locating ? (
+                          <ActivityIndicator size="small" color={colors.muted} />
+                        ) : (
+                          <Crosshair size={17} color={colors.muted} />
+                        )}
+                      </Pressable>
+                    </View>
+
+                    {coords && !locationEdited && (
+                      <Text style={styles.hint}>
+                        Using {coords.latitude.toFixed(3)}, {coords.longitude.toFixed(3)}
+                      </Text>
+                    )}
+
+                    {locationEdited &&
+                      locationHits.map((place) => (
+                        <Pressable
+                          key={`${place.latitude},${place.longitude}`}
+                          style={styles.suggestion}
+                          onPress={() => {
+                            setCoords({ latitude: place.latitude, longitude: place.longitude });
+                            setLocationText(place.label);
+                            setLocationEdited(false);
+                            setLocationHits([]);
+                          }}
+                        >
+                          <Text style={styles.suggestionText}>{place.label}</Text>
+                        </Pressable>
+                      ))}
+
+                    {locationEdited && locationHits.length === 0 && (
+                      <Text style={styles.hint}>
+                        {searchingLocation
+                          ? "Looking up…"
+                          : locationText.trim().length < 2
+                            ? "Type a city or zip code"
+                            : "No match yet — the closest one is used when you create the watch"}
+                      </Text>
+                    )}
                   </View>
 
-                  {coords && !locationEdited && (
-                    <Text style={styles.hint}>
-                      Using {coords.latitude.toFixed(3)}, {coords.longitude.toFixed(3)}
-                    </Text>
-                  )}
-
-                  {locationEdited &&
-                    locationHits.map((place) => (
-                      <Pressable
-                        key={`${place.latitude},${place.longitude}`}
-                        style={styles.suggestion}
-                        onPress={() => {
-                          setCoords({ latitude: place.latitude, longitude: place.longitude });
-                          setLocationText(place.label);
-                          setLocationEdited(false);
-                          setLocationHits([]);
-                        }}
-                      >
-                        <Text style={styles.suggestionText}>{place.label}</Text>
-                      </Pressable>
-                    ))}
-
-                  {locationEdited && locationHits.length === 0 && (
-                    <Text style={styles.hint}>
-                      {searchingLocation
-                        ? "Looking up…"
-                        : locationText.trim().length < 2
-                          ? "Type a city or zip code"
-                          : "No match yet — the closest one is used when you create the watch"}
-                    </Text>
-                  )}
-                </View>
-
-                <View style={styles.field}>
-                  <FieldLabel>Metric</FieldLabel>
-                  <SegmentedControl
-                    options={METRIC_OPTIONS}
-                    value={metric}
-                    onChange={(next) => {
-                      setMetric(next);
-                      // Rain offers day-scale notice and the others hour-scale,
-                      // so a carried-over value can fall outside the new set.
-                      if (!noticeOptionsFor(next).some((o) => o.hours === noticeHours)) {
-                        setNoticeHours(DEFAULT_NOTICE[next]);
-                      }
-                    }}
-                  />
-                </View>
-
-                {metric === "temperature" && (
                   <View style={styles.field}>
-                    <FieldLabel>Alert me when it goes</FieldLabel>
+                    <FieldLabel>Metric</FieldLabel>
+                    <SegmentedControl
+                      options={METRIC_OPTIONS}
+                      value={metric}
+                      onChange={(next) => {
+                        setMetric(next);
+                        // Rain offers day-scale notice and the others hour-scale,
+                        // so a carried-over value can fall outside the new set.
+                        if (!noticeOptionsFor(next).some((o) => o.hours === noticeHours)) {
+                          setNoticeHours(DEFAULT_NOTICE[next]);
+                        }
+                      }}
+                    />
+                  </View>
+
+                  {metric === "temperature" && (
+                    <View style={styles.field}>
+                      <FieldLabel>Alert me when it goes</FieldLabel>
+                      <View style={styles.row}>
+                        {(["below", "above"] as Comparator[]).map((option) => {
+                          const selected = comparator === option;
+                          return (
+                            <Pressable
+                              key={option}
+                              onPress={() => setComparator(option)}
+                              style={[styles.choice, selected && styles.choiceSelected]}
+                            >
+                              <Text
+                                style={[styles.choiceText, selected && styles.choiceTextSelected]}
+                              >
+                                {option === "below" ? "Below" : "Above"}
+                              </Text>
+                            </Pressable>
+                          );
+                        })}
+                      </View>
+                    </View>
+                  )}
+
+                  <View style={styles.field}>
+                    <FieldLabel>Threshold</FieldLabel>
                     <View style={styles.row}>
-                      {(["below", "above"] as Comparator[]).map((option) => {
-                        const selected = comparator === option;
+                      <View style={styles.flex1}>
+                        <TextField
+                          value={threshold}
+                          onChangeText={setThreshold}
+                          keyboardType="numeric"
+                          placeholder={metric === "temperature" ? "85" : "60"}
+                          invalid={Boolean(thresholdProblem)}
+                        />
+                      </View>
+                      {metric === "temperature" && (
+                        <View style={styles.unitToggle}>
+                          <SegmentedControl
+                            options={[
+                              { value: "F" as TempUnit, label: "°F" },
+                              { value: "C" as TempUnit, label: "°C" },
+                            ]}
+                            value={tempUnit}
+                            onChange={switchTempUnit}
+                          />
+                        </View>
+                      )}
+                    </View>
+                    {thresholdProblem && <Text style={styles.error}>{thresholdProblem}</Text>}
+                  </View>
+
+                  <View style={styles.field}>
+                    <FieldLabel>How much notice</FieldLabel>
+                    <View style={styles.chipWrap}>
+                      {noticeOptionsFor(metric).map((option) => {
+                        const selected = noticeHours === option.hours;
                         return (
                           <Pressable
-                            key={option}
-                            onPress={() => setComparator(option)}
-                            style={[styles.choice, selected && styles.choiceSelected]}
+                            key={option.hours}
+                            onPress={() => setNoticeHours(option.hours)}
+                            style={[styles.choice, styles.noticeChip, selected && styles.choiceSelected]}
                           >
                             <Text
                               style={[styles.choiceText, selected && styles.choiceTextSelected]}
                             >
-                              {option === "below" ? "Below" : "Above"}
+                              {option.label}
                             </Text>
                           </Pressable>
                         );
                       })}
                     </View>
+                    <Text style={styles.hint}>
+                      How far ahead to look. A shorter setting never misses anything — it just
+                      tells you closer to the time.
+                    </Text>
                   </View>
-                )}
-
-                <View style={styles.field}>
-                  <FieldLabel>Threshold</FieldLabel>
-                  <View style={styles.row}>
-                    <View style={styles.flex1}>
-                      <TextField
-                        value={threshold}
-                        onChangeText={setThreshold}
-                        keyboardType="numeric"
-                        placeholder={metric === "temperature" ? "85" : "60"}
-                        invalid={Boolean(thresholdProblem)}
-                      />
+                </>
+              ) : source === "screen" ? (
+                <>
+                  <View style={styles.field}>
+                    <View style={styles.labelRow}>
+                      <FieldLabel>Actor or director</FieldLabel>
+                      <Text style={styles.counter}>
+                        {screenCount} / {MUSIC_LIMIT}
+                      </Text>
                     </View>
-                    {metric === "temperature" && (
-                      <View style={styles.unitToggle}>
-                        <SegmentedControl
-                          options={[
-                            { value: "F" as TempUnit, label: "°F" },
-                            { value: "C" as TempUnit, label: "°C" },
-                          ]}
-                          value={tempUnit}
-                          onChange={switchTempUnit}
-                        />
+
+                    {person ? (
+                      <View style={styles.selectedArtist}>
+                        <Clapperboard size={17} color={colors.accent} />
+                        <View style={styles.flex1}>
+                          <Text style={styles.selectedArtistName}>{person.name}</Text>
+                          {person.knownForTitles.length > 0 && (
+                            <Text style={styles.hint} numberOfLines={1}>
+                              {person.knownForTitles.join(" · ")}
+                            </Text>
+                          )}
+                        </View>
+                        <Text style={styles.changeLink} onPress={() => setPerson(null)}>
+                          change
+                        </Text>
                       </View>
+                    ) : (
+                      <>
+                        <View style={styles.inputWithIcon}>
+                          <Search size={16} color={colors.faint} style={styles.inputIcon} />
+                          <TextField
+                            value={personQuery}
+                            onChangeText={setPersonQuery}
+                            placeholder="Start typing a name…"
+                            returnKeyType="done"
+                            onSubmitEditing={Keyboard.dismiss}
+                            style={styles.inputPadded}
+                          />
+                        </View>
+                        {personHits.map((hit) => (
+                          <Pressable
+                            key={hit.tmdbId}
+                            style={styles.suggestion}
+                            onPress={() => {
+                              setPerson(hit);
+                              setPersonHits([]);
+                            }}
+                          >
+                            <Text style={styles.suggestionText}>{hit.name}</Text>
+                            <Text style={styles.hint} numberOfLines={1}>
+                              {[hit.knownFor, ...hit.knownForTitles].filter(Boolean).join(" · ") ||
+                                "person"}
+                            </Text>
+                          </Pressable>
+                        ))}
+                        {(searchingPerson || noPersonResults) && (
+                          <Text style={styles.hint}>
+                            {searchingPerson
+                              ? "Searching…"
+                              : `No people found for "${personQuery.trim()}"`}
+                          </Text>
+                        )}
+                      </>
                     )}
                   </View>
-                  {thresholdProblem && <Text style={styles.error}>{thresholdProblem}</Text>}
-                </View>
 
-                <View style={styles.field}>
-                  <FieldLabel>How much notice</FieldLabel>
-                  <View style={styles.chipWrap}>
-                    {noticeOptionsFor(metric).map((option) => {
-                      const selected = noticeHours === option.hours;
-                      return (
-                        <Pressable
-                          key={option.hours}
-                          onPress={() => setNoticeHours(option.hours)}
-                          style={[styles.choice, styles.noticeChip, selected && styles.choiceSelected]}
-                        >
-                          <Text
-                            style={[styles.choiceText, selected && styles.choiceTextSelected]}
-                          >
-                            {option.label}
-                          </Text>
-                        </Pressable>
-                      );
-                    })}
+                  <View style={styles.switchRow}>
+                    <Switch
+                      value={includeMinorCredits}
+                      onValueChange={setIncludeMinorCredits}
+                      trackColor={{ true: colors.accent, false: colors.hairlineStrong }}
+                      thumbColor="#FFFFFF"
+                    />
+                    <Text style={styles.switchLabel}>Include documentaries & minor credits</Text>
                   </View>
                   <Text style={styles.hint}>
-                    How far ahead to look. A shorter setting never misses anything — it just
-                    tells you closer to the time.
+                    Off by default: talk shows, behind-the-scenes featurettes and courtesy credits
+                    are where most of the noise comes from.
                   </Text>
-                </View>
-              </>
-            ) : source === "screen" ? (
-              <>
-                <View style={styles.field}>
-                  <View style={styles.labelRow}>
-                    <FieldLabel>Actor or director</FieldLabel>
-                    <Text style={styles.counter}>
-                      {screenCount} / {MUSIC_LIMIT}
-                    </Text>
-                  </View>
 
-                  {person ? (
-                    <View style={styles.selectedArtist}>
-                      <Clapperboard size={17} color={colors.accent} />
-                      <View style={styles.flex1}>
-                        <Text style={styles.selectedArtistName}>{person.name}</Text>
-                        {person.knownForTitles.length > 0 && (
-                          <Text style={styles.hint} numberOfLines={1}>
-                            {person.knownForTitles.join(" · ")}
-                          </Text>
-                        )}
-                      </View>
-                      <Text style={styles.changeLink} onPress={() => setPerson(null)}>
-                        change
+                  {screenFull && (
+                    <Text style={styles.warning}>
+                      You&apos;re watching {MUSIC_LIMIT} people — delete one to add another.
+                    </Text>
+                  )}
+                </>
+              ) : (
+                <>
+                  <View style={styles.field}>
+                    <View style={styles.labelRow}>
+                      <FieldLabel>Artist or band</FieldLabel>
+                      <Text style={styles.counter}>
+                        {musicCount} / {MUSIC_LIMIT}
                       </Text>
                     </View>
-                  ) : (
-                    <>
-                      <View style={styles.inputWithIcon}>
-                        <Search size={16} color={colors.faint} style={styles.inputIcon} />
-                        <TextField
-                          value={personQuery}
-                          onChangeText={setPersonQuery}
-                          placeholder="Start typing a name…"
-                          style={styles.inputPadded}
-                        />
-                      </View>
-                      {personHits.map((hit) => (
-                        <Pressable
-                          key={hit.tmdbId}
-                          style={styles.suggestion}
-                          onPress={() => {
-                            setPerson(hit);
-                            setPersonHits([]);
-                          }}
-                        >
-                          <Text style={styles.suggestionText}>{hit.name}</Text>
-                          <Text style={styles.hint} numberOfLines={1}>
-                            {[hit.knownFor, ...hit.knownForTitles].filter(Boolean).join(" · ") ||
-                              "person"}
-                          </Text>
-                        </Pressable>
-                      ))}
-                      {(searchingPerson || noPersonResults) && (
-                        <Text style={styles.hint}>
-                          {searchingPerson
-                            ? "Searching…"
-                            : `No people found for "${personQuery.trim()}"`}
+
+                    {artist ? (
+                      <View style={styles.selectedArtist}>
+                        <AudioLines size={17} color={colors.accent} />
+                        <View style={styles.flex1}>
+                          <Text style={styles.selectedArtistName}>{artist.name}</Text>
+                          {artist.disambiguation && (
+                            <Text style={styles.hint}>{artist.disambiguation}</Text>
+                          )}
+                        </View>
+                        <Text style={styles.changeLink} onPress={() => setArtist(null)}>
+                          change
                         </Text>
-                      )}
-                    </>
-                  )}
-                </View>
-
-                <View style={styles.switchRow}>
-                  <Switch
-                    value={includeMinorCredits}
-                    onValueChange={setIncludeMinorCredits}
-                    trackColor={{ true: colors.accent, false: colors.hairlineStrong }}
-                    thumbColor="#FFFFFF"
-                  />
-                  <Text style={styles.switchLabel}>Include documentaries & minor credits</Text>
-                </View>
-                <Text style={styles.hint}>
-                  Off by default: talk shows, behind-the-scenes featurettes and courtesy credits
-                  are where most of the noise comes from.
-                </Text>
-
-                {screenFull && (
-                  <Text style={styles.warning}>
-                    You&apos;re watching {MUSIC_LIMIT} people — delete one to add another.
-                  </Text>
-                )}
-              </>
-            ) : (
-              <>
-                <View style={styles.field}>
-                  <View style={styles.labelRow}>
-                    <FieldLabel>Artist or band</FieldLabel>
-                    <Text style={styles.counter}>
-                      {musicCount} / {MUSIC_LIMIT}
-                    </Text>
-                  </View>
-
-                  {artist ? (
-                    <View style={styles.selectedArtist}>
-                      <AudioLines size={17} color={colors.accent} />
-                      <View style={styles.flex1}>
-                        <Text style={styles.selectedArtistName}>{artist.name}</Text>
-                        {artist.disambiguation && (
-                          <Text style={styles.hint}>{artist.disambiguation}</Text>
-                        )}
                       </View>
-                      <Text style={styles.changeLink} onPress={() => setArtist(null)}>
-                        change
+                    ) : null}
+
+                    {artist && (
+                      <Text style={styles.hint}>
+                        {loadingRelease
+                          ? "Checking their last release…"
+                          : lastRelease
+                            ? `Last release: ${lastRelease.title} — ${daysSince(lastRelease.date)} days ago`
+                            : "No dated release found for them yet"}
                       </Text>
-                    </View>
-                  ) : null}
+                    )}
 
-                  {artist && (
-                    <Text style={styles.hint}>
-                      {loadingRelease
-                        ? "Checking their last release…"
-                        : lastRelease
-                          ? `Last release: ${lastRelease.title} — ${daysSince(lastRelease.date)} days ago`
-                          : "No dated release found for them yet"}
-                    </Text>
-                  )}
-
-                  {!artist && (
-                    <>
-                      <View style={styles.inputWithIcon}>
-                        <Search size={16} color={colors.faint} style={styles.inputIcon} />
-                        <TextField
-                          value={artistQuery}
-                          onChangeText={setArtistQuery}
-                          placeholder="Start typing a name…"
-                          style={styles.inputPadded}
-                        />
-                      </View>
-                      {artistHits.map((hit) => (
-                        <Pressable
-                          key={hit.mbid}
-                          style={styles.suggestion}
-                          onPress={() => {
-                            setArtist(hit);
-                            setArtistHits([]);
-                          }}
-                        >
-                          <Text style={styles.suggestionText}>{hit.name}</Text>
+                    {!artist && (
+                      <>
+                        <View style={styles.inputWithIcon}>
+                          <Search size={16} color={colors.faint} style={styles.inputIcon} />
+                          <TextField
+                            value={artistQuery}
+                            onChangeText={setArtistQuery}
+                            placeholder="Start typing a name…"
+                            returnKeyType="done"
+                            onSubmitEditing={Keyboard.dismiss}
+                            style={styles.inputPadded}
+                          />
+                        </View>
+                        {artistHits.map((hit) => (
+                          <Pressable
+                            key={hit.mbid}
+                            style={styles.suggestion}
+                            onPress={() => {
+                              setArtist(hit);
+                              setArtistHits([]);
+                            }}
+                          >
+                            <Text style={styles.suggestionText}>{hit.name}</Text>
+                            <Text style={styles.hint}>
+                              {[hit.disambiguation, hit.type, hit.country]
+                                .filter(Boolean)
+                                .join(" · ") || "artist"}
+                            </Text>
+                          </Pressable>
+                        ))}
+                        {(searching || noResults) && (
                           <Text style={styles.hint}>
-                            {[hit.disambiguation, hit.type, hit.country]
-                              .filter(Boolean)
-                              .join(" · ") || "artist"}
+                            {searching
+                              ? "Searching…"
+                              : `No artists found for "${artistQuery.trim()}"`}
                           </Text>
-                        </Pressable>
-                      ))}
-                      {(searching || noResults) && (
-                        <Text style={styles.hint}>
-                          {searching
-                            ? "Searching…"
-                            : `No artists found for "${artistQuery.trim()}"`}
-                        </Text>
-                      )}
-                    </>
-                  )}
-                </View>
+                        )}
+                      </>
+                    )}
+                  </View>
 
-                <View style={styles.switchRow}>
-                  <Switch
-                    value={includeSingles}
-                    onValueChange={setIncludeSingles}
-                    trackColor={{ true: colors.accent, false: colors.hairlineStrong }}
-                    thumbColor="#FFFFFF"
-                  />
-                  <Text style={styles.switchLabel}>Include singles</Text>
-                </View>
-                <Text style={styles.hint}>
-                  Albums and EPs are always included. Singles can be frequent for busy artists.
-                </Text>
-
-                {musicFull && (
-                  <Text style={styles.warning}>
-                    You&apos;re watching {MUSIC_LIMIT} artists — delete one to add another.
+                  <View style={styles.switchRow}>
+                    <Switch
+                      value={includeSingles}
+                      onValueChange={setIncludeSingles}
+                      trackColor={{ true: colors.accent, false: colors.hairlineStrong }}
+                      thumbColor="#FFFFFF"
+                    />
+                    <Text style={styles.switchLabel}>Include singles</Text>
+                  </View>
+                  <Text style={styles.hint}>
+                    Albums and EPs are always included. Singles can be frequent for busy artists.
                   </Text>
-                )}
-              </>
-            )}
 
-            {preview && (
-              <View style={styles.preview}>
-                <Info size={16} color={colors.faint} />
-                <Text style={styles.previewText}>{preview}</Text>
-              </View>
-            )}
-          </ScrollView>
+                  {musicFull && (
+                    <Text style={styles.warning}>
+                      You&apos;re watching {MUSIC_LIMIT} artists — delete one to add another.
+                    </Text>
+                  )}
+                </>
+              )}
 
-          <View style={styles.sheetFooter}>
-            <Button variant="ghost" label="Cancel" onPress={closeBuilder} />
-            <Button
-              label={editingId ? "Save changes" : "Create watch"}
-              onPress={onSave}
-              disabled={!canCreate}
-              busy={busy}
-              style={styles.flex1}
-            />
+              {preview && (
+                <View style={styles.preview}>
+                  <Info size={16} color={colors.faint} />
+                  <Text style={styles.previewText}>{preview}</Text>
+                </View>
+              )}
+            </ScrollView>
+
+            <View style={styles.sheetFooter}>
+              <Button variant="ghost" label="Cancel" onPress={closeBuilder} />
+              <Button
+                label={editingId ? "Save changes" : "Create alert"}
+                onPress={onSave}
+                disabled={!canCreate}
+                busy={busy}
+                style={styles.flex1}
+              />
+            </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </View>
   );
@@ -1432,12 +1449,9 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
 
+  sheetLayer: { flex: 1 },
   backdrop: { flex: 1, backgroundColor: "rgba(20,24,26,0.25)" },
   sheet: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
     maxHeight: "92%",
     backgroundColor: colors.surface,
     borderTopLeftRadius: 18,

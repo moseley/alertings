@@ -32,7 +32,7 @@ export function WatchCard({
       style={styles.card}
       onPress={() => onEdit(watch)}
       accessibilityRole="button"
-      accessibilityLabel={`Edit watch for ${watchTitle(watch)}`}
+      accessibilityLabel={`Edit alert for ${watchTitle(watch)}`}
     >
       <View style={styles.header}>
         <View style={styles.identity}>

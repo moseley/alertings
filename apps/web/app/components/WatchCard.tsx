@@ -33,7 +33,7 @@ export function WatchCard({
       <button
         type="button"
         onClick={() => onEdit(watch)}
-        aria-label={`Edit watch for ${watchTitle(watch)}`}
+        aria-label={`Edit alert for ${watchTitle(watch)}`}
         className="absolute inset-0 z-0 rounded-card outline-none"
       />
       <header className="pointer-events-none relative z-10 flex items-start justify-between gap-3">

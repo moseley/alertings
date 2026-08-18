@@ -715,7 +715,7 @@ export default function Home() {
             <button
               type="button"
               onClick={openBuilder}
-              aria-label="New watch"
+              aria-label="New alert"
               className="grid h-[34px] w-[34px] place-items-center rounded-control bg-accent text-white transition-colors hover:bg-[#0c5740] lg:hidden"
             >
               <Plus size={18} />
@@ -903,7 +903,7 @@ export default function Home() {
 
       <SlideOver
         open={builderOpen}
-        title={editingId ? "Edit watch" : "New watch"}
+        title={editingId ? "Edit alert" : "New alert"}
         onClose={closeBuilder}
       >
         <WatchForm
