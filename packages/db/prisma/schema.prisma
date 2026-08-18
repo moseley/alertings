@@ -1,4 +1,4 @@
-// Watchtower data layer — Prisma 7 (driver adapters).
+// Alertings data layer — Prisma 7 (driver adapters).
 // Connection URLs are supplied at runtime (see src/index.ts) and to the CLI
 // (see prisma.config.ts), not via env() here.
 
@@ -41,7 +41,7 @@ model Device {
 
 // A saved alert. Deliberately source-agnostic: `source` names the adapter
 // ("weather") and `config` holds that adapter's location + rule as JSON,
-// validated by Zod in @watchtower/core. New domains = new source values, no
+// validated by Zod in @alertings/core. New domains = new source values, no
 // schema change.
 model Watch {
   id            String    @id @default(cuid())

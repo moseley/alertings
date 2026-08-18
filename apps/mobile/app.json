@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Alertings",
-    "slug": "watchtower",
+    "slug": "alertings",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,13 +18,13 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.moseley.watchtower",
+      "bundleIdentifier": "app.alertings",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
-      "package": "com.watchtower.app",
+      "package": "app.alertings",
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "backgroundColor": "#0F6B4F",
@@ -42,10 +42,7 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "apiUrl": "https://alertings.app",
-      "eas": {
-        "projectId": "47d0fff9-6f16-4b05-b6b2-054b03e6c106"
-      }
+      "apiUrl": "https://alertings.app"
     },
     "owner": "moseley"
   }

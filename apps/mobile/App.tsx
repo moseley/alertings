@@ -85,21 +85,8 @@ const HISTORY_PAGE = 10;
 
 /** Local identity, so declining notifications doesn't cost the user their watches. */
 const OWNER_KEY = "alertings.ownerId";
-/**
- * The pre-rebrand key. Read once so an existing install keeps its identity —
- * without this the app would find nothing, mint a new owner, and the watches
- * already created would be stranded on the old one.
- */
-const LEGACY_OWNER_KEY = "watchtower.ownerId";
-
 async function readStoredOwnerId(): Promise<string | null> {
-  const current = await AsyncStorage.getItem(OWNER_KEY);
-  if (current) return current;
-  const legacy = await AsyncStorage.getItem(LEGACY_OWNER_KEY);
-  if (!legacy) return null;
-  await AsyncStorage.setItem(OWNER_KEY, legacy);
-  await AsyncStorage.removeItem(LEGACY_OWNER_KEY);
-  return legacy;
+  return AsyncStorage.getItem(OWNER_KEY);
 }
 
 /** Roughly the same temperature in each scale, so the default reads sensibly. */
@@ -333,7 +320,7 @@ export default function App() {
       if (!push.ok) {
         setStatus(
           push.reason === "denied"
-            ? "Notifications are off. Turn them on in Settings ⬺ Alertings ⬺ Notifications."
+            ? "Notifications are off. Turn them on in Settings › Alertings › Notifications."
             : (push.message ?? "Couldn't turn on notifications."),
         );
         return;
@@ -1051,7 +1038,7 @@ export default function App() {
                   {locationEdited && locationHits.length === 0 && (
                     <Text style={styles.hint}>
                       {searchingLocation
-                        ? "Looking up⬦"
+                        ? "Looking up…"
                         : locationText.trim().length < 2
                           ? "Type a city or zip code"
                           : "No match yet — the closest one is used when you create the watch"}
@@ -1185,7 +1172,7 @@ export default function App() {
                         <TextField
                           value={personQuery}
                           onChangeText={setPersonQuery}
-                          placeholder="Start typing a name⬦"
+                          placeholder="Start typing a name…"
                           style={styles.inputPadded}
                         />
                       </View>
@@ -1208,7 +1195,7 @@ export default function App() {
                       {(searchingPerson || noPersonResults) && (
                         <Text style={styles.hint}>
                           {searchingPerson
-                            ? "Searching⬦"
+                            ? "Searching…"
                             : `No people found for "${personQuery.trim()}"`}
                         </Text>
                       )}
@@ -1264,7 +1251,7 @@ export default function App() {
                   {artist && (
                     <Text style={styles.hint}>
                       {loadingRelease
-                        ? "Checking their last release⬦"
+                        ? "Checking their last release…"
                         : lastRelease
                           ? `Last release: ${lastRelease.title} — ${daysSince(lastRelease.date)} days ago`
                           : "No dated release found for them yet"}
@@ -1278,7 +1265,7 @@ export default function App() {
                         <TextField
                           value={artistQuery}
                           onChangeText={setArtistQuery}
-                          placeholder="Start typing a name⬦"
+                          placeholder="Start typing a name…"
                           style={styles.inputPadded}
                         />
                       </View>
@@ -1302,7 +1289,7 @@ export default function App() {
                       {(searching || noResults) && (
                         <Text style={styles.hint}>
                           {searching
-                            ? "Searching⬦"
+                            ? "Searching…"
                             : `No artists found for "${artistQuery.trim()}"`}
                         </Text>
                       )}
