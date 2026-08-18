@@ -1,5 +1,5 @@
-import { prisma } from "@watchtower/db";
-import { HealthSchema } from "@watchtower/types";
+import { prisma } from "@alertings/db";
+import { HealthSchema } from "@alertings/types";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +27,7 @@ export async function GET() {
 
   const body = HealthSchema.parse({
     ok: true,
-    service: "watchtower-web",
+    service: "alertings-web",
     lastPollAt,
     minutesSinceLastPoll,
     pollStale: minutesSinceLastPoll === null ? null : minutesSinceLastPoll > STALE_AFTER_MINUTES,

@@ -1,5 +1,5 @@
-import { type Prisma, prisma } from "@watchtower/db";
-import { CreateWatchInputSchema, WATCH_LIMITS } from "@watchtower/types";
+import { type Prisma, prisma } from "@alertings/db";
+import { CreateWatchInputSchema, WATCH_LIMITS } from "@alertings/types";
 import { ConfigLookupError, buildStoredConfig } from "../../../lib/watch-config";
 
 export const dynamic = "force-dynamic";

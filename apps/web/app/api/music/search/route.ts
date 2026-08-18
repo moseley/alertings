@@ -1,5 +1,5 @@
-import { searchArtists } from "@watchtower/core";
-import type { ArtistSearchResult } from "@watchtower/types";
+import { searchArtists } from "@alertings/core";
+import type { ArtistSearchResult } from "@alertings/types";
 
 export const dynamic = "force-dynamic";
 

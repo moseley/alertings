@@ -1,4 +1,4 @@
-import { WebPushSubscriptionSchema } from "@watchtower/types";
+import { WebPushSubscriptionSchema } from "@alertings/types";
 import { sendExpoPush, type PushMessage, type PushResult } from "./expo";
 import { sendWebPush, type VapidConfig } from "./webpush";
 

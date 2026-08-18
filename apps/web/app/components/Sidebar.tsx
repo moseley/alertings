@@ -59,7 +59,7 @@ export function Sidebar({
     <aside className="hidden w-[226px] shrink-0 flex-col border-r border-hairline bg-sidebar p-4 lg:flex">
       <div className="flex items-center gap-2.5 px-1">
         <Logo className="h-8 w-8" />
-        <span className="text-[16px] font-bold tracking-[-.02em] text-ink">Watchtower</span>
+        <span className="text-[16px] font-bold tracking-[-.02em] text-ink">Alertings</span>
       </div>
 
       <button

@@ -1,5 +1,5 @@
 {
-  "name": "@watchtower/db",
+  "name": "@alertings/db",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@types/pg": "^8.20.0",
-    "@watchtower/tsconfig": "workspace:*",
+    "@alertings/tsconfig": "workspace:*",
     "dotenv": "^17.4.2",
     "prisma": "^7.9.0",
     "typescript": "^5"

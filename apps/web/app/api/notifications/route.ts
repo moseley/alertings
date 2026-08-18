@@ -1,4 +1,4 @@
-import { prisma } from "@watchtower/db";
+import { prisma } from "@alertings/db";
 
 export const dynamic = "force-dynamic";
 

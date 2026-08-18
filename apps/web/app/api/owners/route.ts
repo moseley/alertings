@@ -1,10 +1,10 @@
-import { prisma } from "@watchtower/db";
+import { prisma } from "@alertings/db";
 
 export const dynamic = "force-dynamic";
 
 // Creates a bare identity with no push destination attached.
 //
-// Notifications are the point of Watchtower, but they must not be a condition
+// Notifications are the point of Alertings, but they must not be a condition
 // of using it: someone who declines the permission prompt still needs to be
 // able to look around and set watches up, then enable notifications later.
 export async function POST() {

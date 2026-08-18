@@ -3,7 +3,7 @@ import {
   type Location,
   type WeatherRule,
   type WeatherWatchConfig,
-} from "@watchtower/types";
+} from "@alertings/types";
 import type { AdapterContext, SourceAdapter, WatcherMatch } from "./types";
 
 const OPEN_METEO = "https://api.open-meteo.com/v1/forecast";

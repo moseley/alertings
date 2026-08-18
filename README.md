@@ -1,4 +1,4 @@
-# Watchtower
+# Alertings
 
 An "everything app" that starts as a **personal watcher / alerting platform**.
 
@@ -34,7 +34,7 @@ cleanly in Phase 2 — keeping us out of a cookie-only corner for mobile.
 ## Layout
 
 ```
-watchtower/
+alertings/
 ├─ apps/
 │  ├─ web/        Next.js — website frontend + API/backend
 │  └─ mobile/     Expo — iOS + Android frontend
@@ -42,7 +42,7 @@ watchtower/
 │  ├─ types/      shared TS types + Zod schemas
 │  ├─ core/       the source-agnostic watcher engine
 │  ├─ db/         Prisma data layer (Phase 1)
-│  └─ config/     shared tsconfig base (@watchtower/tsconfig)
+│  └─ config/     shared tsconfig base (@alertings/tsconfig)
 ├─ turbo.json
 └─ pnpm-workspace.yaml
 ```

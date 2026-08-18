@@ -1,5 +1,5 @@
-import { createPushSender, defaultAdapters, runWatches } from "@watchtower/core";
-import { prisma } from "@watchtower/db";
+import { createPushSender, defaultAdapters, runWatches } from "@alertings/core";
+import { prisma } from "@alertings/db";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -19,7 +19,7 @@ function vapidFromEnv() {
   const privateKey = process.env.VAPID_PRIVATE_KEY;
   if (!publicKey || !privateKey) return undefined;
   return {
-    subject: process.env.VAPID_SUBJECT ?? "https://watchtower-web-nu.vercel.app",
+    subject: process.env.VAPID_SUBJECT ?? "https://alertings.app",
     publicKey,
     privateKey,
   };

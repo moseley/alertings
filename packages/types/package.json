@@ -1,5 +1,5 @@
 {
-  "name": "@watchtower/types",
+  "name": "@alertings/types",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -12,7 +12,7 @@
     "zod": "^4"
   },
   "devDependencies": {
-    "@watchtower/tsconfig": "workspace:*",
+    "@alertings/tsconfig": "workspace:*",
     "typescript": "^5"
   }
 }

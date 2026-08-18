@@ -1,5 +1,5 @@
 import webpush from "web-push";
-import type { WebPushSubscription } from "@watchtower/types";
+import type { WebPushSubscription } from "@alertings/types";
 import type { PushMessage, PushResult } from "./expo";
 
 export interface VapidConfig {

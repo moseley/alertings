@@ -3,8 +3,8 @@ import Link from "next/link";
 import { Logo } from "../components/Logo";
 
 export const metadata: Metadata = {
-  title: "Privacy — Watchtower",
-  description: "What Watchtower collects, why, and who it is shared with.",
+  title: "Privacy — Alertings",
+  description: "What Alertings collects, why, and who it is shared with.",
 };
 
 // NOTE: this describes what the code actually does today, but it is a legal
@@ -30,14 +30,14 @@ export default function PrivacyPage() {
       <div className="mx-auto w-full max-w-2xl px-5 py-12">
         <Link href="/" className="flex items-center gap-3 text-muted hover:text-ink">
           <Logo className="h-8 w-8" />
-          <span className="text-[14px]">← Back to Watchtower</span>
+          <span className="text-[14px]">← Back to Alertings</span>
         </Link>
 
         <h1 className="mt-8 text-[28px] font-bold tracking-[-.03em]">Privacy</h1>
         <p className="mt-2 font-mono text-[11px] text-faint">Last updated {LAST_UPDATED}</p>
 
         <p className="mt-6 text-[14px] leading-relaxed text-muted">
-          Watchtower watches sources you choose and notifies you when something matches. It
+          Alertings watches sources you choose and notifies you when something matches. It
           collects only what it needs to do that. There are no adverts, no analytics, and no
           third-party trackers, and your data is never sold.
         </p>
@@ -64,7 +64,7 @@ export default function PrivacyPage() {
           </ul>
           <p>
             Location is only read when you tap the location button, and only while the app is
-            open. Watchtower never tracks your location in the background. You can skip it
+            open. Alertings never tracks your location in the background. You can skip it
             entirely and type a city or postcode instead.
           </p>
         </Section>
@@ -72,7 +72,7 @@ export default function PrivacyPage() {
         <Section title="What is not collected">
           <p>
             No name, email address, phone number, contacts, photos, or advertising identifiers.
-            Watchtower has no accounts and no login, so it holds nothing that identifies you
+            Alertings has no accounts and no login, so it holds nothing that identifies you
             personally. Your data is tied to your device, not to you.
           </p>
         </Section>
@@ -123,7 +123,7 @@ export default function PrivacyPage() {
 
         <Section title="Children">
           <p>
-            Watchtower is not directed at children and does not knowingly collect information from
+            Alertings is not directed at children and does not knowingly collect information from
             them.
           </p>
         </Section>
@@ -143,7 +143,7 @@ export default function PrivacyPage() {
         </Section>
 
         <Section title="Data sources and credits">
-          <p>Watchtower is built on data generously made available by others:</p>
+          <p>Alertings is built on data generously made available by others:</p>
           <ul className="list-disc space-y-2 pl-5">
             <li>
               Weather and geocoding by{" "}

@@ -2,7 +2,7 @@ import {
   ScreenWatchConfigSchema,
   type PersonSearchResult,
   type ScreenWatchConfig,
-} from "@watchtower/types";
+} from "@alertings/types";
 import type { AdapterContext, SourceAdapter, WatcherMatch } from "./types";
 
 const TMDB_ROOT = "https://api.themoviedb.org/3";

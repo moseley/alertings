@@ -1,4 +1,4 @@
 {
-  "extends": "@watchtower/tsconfig/base.json",
+  "extends": "@alertings/tsconfig/base.json",
   "include": ["src"]
 }

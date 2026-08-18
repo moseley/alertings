@@ -1,6 +1,6 @@
 {
-  "name": "Watchtower",
-  "short_name": "Watchtower",
+  "name": "Alertings",
+  "short_name": "Alertings",
   "description": "Watch a source, match your criteria, get notified.",
   "start_url": "/",
   "display": "standalone",

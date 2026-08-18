@@ -1,5 +1,5 @@
-import { getPersonSnapshot } from "@watchtower/core";
-import type { CreateWatchInput } from "@watchtower/types";
+import { getPersonSnapshot } from "@alertings/core";
+import type { CreateWatchInput } from "@alertings/types";
 import { lookupLatestRelease } from "./latest-release";
 
 type Parsed = Extract<CreateWatchInput, { source: string }>;

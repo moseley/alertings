@@ -1,5 +1,5 @@
 {
-  "name": "@watchtower/core",
+  "name": "@alertings/core",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -9,14 +9,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@watchtower/db": "workspace:*",
-    "@watchtower/types": "workspace:*",
+    "@alertings/db": "workspace:*",
+    "@alertings/types": "workspace:*",
     "web-push": "^3.6.7",
     "zod": "^4"
   },
   "devDependencies": {
     "@types/web-push": "^3.6.4",
-    "@watchtower/tsconfig": "workspace:*",
+    "@alertings/tsconfig": "workspace:*",
     "typescript": "^5"
   }
 }

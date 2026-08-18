@@ -1,5 +1,5 @@
 /**
- * Rasterises the Watchtower mark into the PNGs Expo needs.
+ * Rasterises the Alertings mark into the PNGs Expo needs.
  *
  *   node scripts/generate-icons.mjs
  *

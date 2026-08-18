@@ -20,6 +20,9 @@ importers:
 
   apps/mobile:
     dependencies:
+      '@alertings/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       '@expo-google-fonts/ibm-plex-mono':
         specifier: ^0.4.1
         version: 0.4.1
@@ -29,9 +32,6 @@ importers:
       '@react-native-async-storage/async-storage':
         specifier: 2.2.0
         version: 2.2.0(react-native@0.86.2(@babel/core@7.29.7(supports-color@8.1.1))(@types/react@19.2.17)(react@19.2.3)(supports-color@8.1.1))
-      '@watchtower/types':
-        specifier: workspace:*
-        version: link:../../packages/types
       expo:
         specifier: ~57.0.9
         version: 57.0.9(@babel/core@7.29.7(supports-color@8.1.1))(@expo/dom-webview@57.0.1)(react-dom@19.2.4(react@19.2.3))(react-native@0.86.2(@babel/core@7.29.7(supports-color@8.1.1))(@types/react@19.2.17)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1)(typescript@6.0.3)
@@ -75,13 +75,13 @@ importers:
 
   apps/web:
     dependencies:
-      '@watchtower/core':
+      '@alertings/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@watchtower/db':
+      '@alertings/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@watchtower/types':
+      '@alertings/types':
         specifier: workspace:*
         version: link:../../packages/types
       dotenv:
@@ -129,10 +129,10 @@ importers:
 
   packages/core:
     dependencies:
-      '@watchtower/db':
+      '@alertings/db':
         specifier: workspace:*
         version: link:../db
-      '@watchtower/types':
+      '@alertings/types':
         specifier: workspace:*
         version: link:../types
       web-push:
@@ -142,12 +142,12 @@ importers:
         specifier: ^4
         version: 4.4.3
     devDependencies:
+      '@alertings/tsconfig':
+        specifier: workspace:*
+        version: link:../config
       '@types/web-push':
         specifier: ^3.6.4
         version: 3.6.4
-      '@watchtower/tsconfig':
-        specifier: workspace:*
-        version: link:../config
       typescript:
         specifier: ^5
         version: 5.9.3
@@ -164,12 +164,12 @@ importers:
         specifier: ^8.22.0
         version: 8.22.0
     devDependencies:
+      '@alertings/tsconfig':
+        specifier: workspace:*
+        version: link:../config
       '@types/pg':
         specifier: ^8.20.0
         version: 8.20.0
-      '@watchtower/tsconfig':
-        specifier: workspace:*
-        version: link:../config
       dotenv:
         specifier: ^17.4.2
         version: 17.4.2
@@ -186,7 +186,7 @@ importers:
         specifier: ^4
         version: 4.4.3
     devDependencies:
-      '@watchtower/tsconfig':
+      '@alertings/tsconfig':
         specifier: workspace:*
         version: link:../config
       typescript:

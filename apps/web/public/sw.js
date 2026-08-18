@@ -1,4 +1,4 @@
-// Watchtower service worker — receives Web Push and shows notifications.
+// Alertings service worker — receives Web Push and shows notifications.
 self.addEventListener("push", (event) => {
   let data = {};
   try {
@@ -7,7 +7,7 @@ self.addEventListener("push", (event) => {
     // non-JSON payload; show a generic notification
   }
   event.waitUntil(
-    self.registration.showNotification(data.title || "Watchtower", {
+    self.registration.showNotification(data.title || "Alertings", {
       body: data.body || "",
       data: data.data || {},
     }),

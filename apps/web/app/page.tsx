@@ -8,7 +8,7 @@ import { WatchCard } from "./components/WatchCard";
 import { WatchForm } from "./components/WatchForm";
 import { AudioLines, Bell, Clapperboard, CloudSun, Layers, Plus, watchIcon } from "./components/icons";
 import { Button } from "./components/primitives";
-import { noticeOptionsFor, type LatestRelease } from "@watchtower/types";
+import { noticeOptionsFor, type LatestRelease } from "@alertings/types";
 import type {
   ArtistHit,
   ListView,
@@ -25,7 +25,23 @@ type Metric = "temperature" | "precipitation_probability" | "wind_speed";
 type Comparator = "below" | "above";
 type TempUnit = "F" | "C";
 
-const OWNER_KEY = "watchtower.ownerId";
+const OWNER_KEY = "alertings.ownerId";
+/**
+ * The pre-rebrand key. Read once so an existing browser keeps its identity —
+ * without this the app would find nothing, mint a new owner, and the watches
+ * already created would be stranded on the old one.
+ */
+const LEGACY_OWNER_KEY = "watchtower.ownerId";
+
+function readStoredOwnerId(): string | null {
+  const current = localStorage.getItem(OWNER_KEY);
+  if (current) return current;
+  const legacy = localStorage.getItem(LEGACY_OWNER_KEY);
+  if (!legacy) return null;
+  localStorage.setItem(OWNER_KEY, legacy);
+  localStorage.removeItem(LEGACY_OWNER_KEY);
+  return legacy;
+}
 const MUSIC_LIMIT = 5;
 
 /** How many alerts to show at a time before "View more". */
@@ -166,7 +182,7 @@ export default function Home() {
       setSupported(false);
       return;
     }
-    const stored = localStorage.getItem(OWNER_KEY);
+    const stored = readStoredOwnerId();
     if (stored) {
       setOwnerId(stored);
       void refreshWatches(stored);
@@ -718,7 +734,7 @@ export default function Home() {
           <div className="rounded-card border border-hairline bg-surface p-5 shadow-card">
             <h2 className="text-[15px] font-semibold text-ink">Turn on notifications</h2>
             <p className="mt-1 text-[13.5px] text-muted">
-              Watchtower alerts you through browser notifications — they arrive even when this tab
+              Alertings alerts you through browser notifications — they arrive even when this tab
               is closed.
             </p>
             <Button className="mt-4" onClick={enableNotifications} disabled={busy}>

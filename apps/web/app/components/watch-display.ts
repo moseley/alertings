@@ -1,4 +1,4 @@
-import { noticeLabel, tmdbImageUrl } from "@watchtower/types";
+import { noticeLabel, tmdbImageUrl } from "@alertings/types";
 import type { WatchRow } from "./types";
 
 const DAY_MS = 86_400_000;

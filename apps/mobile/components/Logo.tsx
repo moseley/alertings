@@ -1,7 +1,7 @@
 import Svg, { Circle, G, Path, Rect } from "react-native-svg";
 
 /**
- * Watchtower mark — the broadcast tower from the Atlas mock, reversed out of
+ * Alertings mark — the broadcast tower from the Atlas mock, reversed out of
  * an accent tile. Geometry is Lucide's RadioTower, kept in step with the web
  * version at apps/web/app/components/Logo.tsx and with
  * scripts/generate-icons.mjs.

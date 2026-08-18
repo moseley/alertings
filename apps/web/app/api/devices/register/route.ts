@@ -1,5 +1,5 @@
-import { type Prisma, prisma } from "@watchtower/db";
-import { DeviceRegistrationSchema } from "@watchtower/types";
+import { type Prisma, prisma } from "@alertings/db";
+import { DeviceRegistrationSchema } from "@alertings/types";
 
 export const dynamic = "force-dynamic";
 

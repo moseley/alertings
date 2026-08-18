@@ -1,5 +1,5 @@
-import { getLatestRelease } from "@watchtower/core";
-import type { LatestRelease } from "@watchtower/types";
+import { getLatestRelease } from "@alertings/core";
+import type { LatestRelease } from "@alertings/types";
 
 /**
  * An artist's back catalogue barely moves, and both the builder form and the

@@ -1,4 +1,4 @@
-import type { CreateWatchInput } from "@watchtower/types";
+import type { CreateWatchInput } from "@alertings/types";
 import { API_URL } from "./config";
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {

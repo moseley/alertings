@@ -1,5 +1,5 @@
 /**
- * Watchtower core — the source-agnostic watcher engine.
+ * Alertings core — the source-agnostic watcher engine.
  *
  *   watch a source → match my criteria → push me a notification
  *

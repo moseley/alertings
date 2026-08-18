@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Watchtower",
+    "name": "Alertings",
     "slug": "watchtower",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -11,7 +11,7 @@
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "Watchtower uses your location to prefill where your weather watches apply."
+          "locationWhenInUsePermission": "Alertings uses your location to prefill where your weather watches apply."
         }
       ],
       "expo-font"
@@ -42,7 +42,7 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "apiUrl": "https://watchtower-web-nu.vercel.app",
+      "apiUrl": "https://alertings.app",
       "eas": {
         "projectId": "47d0fff9-6f16-4b05-b6b2-054b03e6c106"
       }

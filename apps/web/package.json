@@ -10,9 +10,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@watchtower/core": "workspace:*",
-    "@watchtower/db": "workspace:*",
-    "@watchtower/types": "workspace:*",
+    "@alertings/core": "workspace:*",
+    "@alertings/db": "workspace:*",
+    "@alertings/types": "workspace:*",
     "dotenv": "^17.4.2",
     "lucide-react": "^1.28.0",
     "next": "16.2.11",

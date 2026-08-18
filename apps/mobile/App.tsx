@@ -8,7 +8,7 @@ import {
   SpaceGrotesk_600SemiBold,
   SpaceGrotesk_700Bold,
 } from "@expo-google-fonts/space-grotesk";
-import { WeatherWatchConfigSchema, noticeLabel, noticeOptionsFor } from "@watchtower/types";
+import { WeatherWatchConfigSchema, noticeLabel, noticeOptionsFor } from "@alertings/types";
 import { useFonts } from "expo-font";
 import * as Location from "expo-location";
 import * as Notifications from "expo-notifications";
@@ -84,7 +84,23 @@ type TempUnit = "F" | "C";
 const HISTORY_PAGE = 10;
 
 /** Local identity, so declining notifications doesn't cost the user their watches. */
-const OWNER_KEY = "watchtower.ownerId";
+const OWNER_KEY = "alertings.ownerId";
+/**
+ * The pre-rebrand key. Read once so an existing install keeps its identity —
+ * without this the app would find nothing, mint a new owner, and the watches
+ * already created would be stranded on the old one.
+ */
+const LEGACY_OWNER_KEY = "watchtower.ownerId";
+
+async function readStoredOwnerId(): Promise<string | null> {
+  const current = await AsyncStorage.getItem(OWNER_KEY);
+  if (current) return current;
+  const legacy = await AsyncStorage.getItem(LEGACY_OWNER_KEY);
+  if (!legacy) return null;
+  await AsyncStorage.setItem(OWNER_KEY, legacy);
+  await AsyncStorage.removeItem(LEGACY_OWNER_KEY);
+  return legacy;
+}
 
 /** Roughly the same temperature in each scale, so the default reads sensibly. */
 const DEFAULT_THRESHOLD: Record<TempUnit, string> = { F: "85", C: "29" };
@@ -201,7 +217,7 @@ export default function App() {
       try {
         // Reuse the stored identity so declining notifications, or reinstalling
         // the token, never orphans the watches already created.
-        let id = await AsyncStorage.getItem(OWNER_KEY);
+        let id = await readStoredOwnerId();
 
         // Read the existing permission without prompting — the prompt belongs
         // behind the button, not on first launch.
@@ -317,7 +333,7 @@ export default function App() {
       if (!push.ok) {
         setStatus(
           push.reason === "denied"
-            ? "Notifications are off. Turn them on in Settings ⬺ Watchtower ⬺ Notifications."
+            ? "Notifications are off. Turn them on in Settings ⬺ Alertings ⬺ Notifications."
             : (push.message ?? "Couldn't turn on notifications."),
         );
         return;

@@ -2,7 +2,7 @@
 
 import { AudioLines, Clapperboard, CloudSun, Crosshair, Info, Search } from "./icons";
 import { Button, FieldLabel, SegmentedControl, TextField } from "./primitives";
-import { noticeLabel, noticeOptionsFor, tmdbImageUrl } from "@watchtower/types";
+import { noticeLabel, noticeOptionsFor, tmdbImageUrl } from "@alertings/types";
 import type { ArtistHit, PersonHit, Place } from "./types";
 
 type Source = "weather" | "music" | "screen";

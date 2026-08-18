@@ -18,7 +18,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Watchtower",
+  title: "Alertings",
   description: "Watch a source, match your criteria, get notified.",
   manifest: "/manifest.webmanifest",
 };

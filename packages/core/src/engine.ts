@@ -1,4 +1,4 @@
-import type { Prisma, PrismaClient } from "@watchtower/db";
+import type { Prisma, PrismaClient } from "@alertings/db";
 import type { SourceAdapter, WatcherMatch } from "./adapters/types";
 import type { DispatchResult, PushSender, PushTarget } from "./push/dispatcher";
 

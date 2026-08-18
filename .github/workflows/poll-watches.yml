@@ -22,7 +22,7 @@ jobs:
       - name: Trigger watcher engine
         env:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
-          POLL_URL: https://watchtower-web-nu.vercel.app/api/cron/poll
+          POLL_URL: https://alertings.app/api/cron/poll
         run: |
           if [ -z "$CRON_SECRET" ]; then
             echo "::error::CRON_SECRET repository secret is not set — the poll would 401."

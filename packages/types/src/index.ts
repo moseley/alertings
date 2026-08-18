@@ -1,10 +1,10 @@
 /**
- * Shared types & validation schemas for Watchtower.
+ * Shared types & validation schemas for Alertings.
  * Imported by web, mobile, and the watcher engine.
  */
 import { z } from "zod";
 
-export const APP_NAME = "Watchtower" as const;
+export const APP_NAME = "Alertings" as const;
 
 /**
  * Health of the service, plus whether the watcher engine is actually running.

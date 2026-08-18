@@ -1,5 +1,5 @@
-import { searchPeople } from "@watchtower/core";
-import type { PersonSearchResult } from "@watchtower/types";
+import { searchPeople } from "@alertings/core";
+import type { PersonSearchResult } from "@alertings/types";
 
 export const dynamic = "force-dynamic";
 

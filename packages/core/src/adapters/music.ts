@@ -1,11 +1,11 @@
-import { MusicWatchConfigSchema, type MusicWatchConfig } from "@watchtower/types";
+import { MusicWatchConfigSchema, type MusicWatchConfig } from "@alertings/types";
 import type { AdapterContext, SourceAdapter, WatcherMatch } from "./types";
 
 const MB_ROOT = "https://musicbrainz.org/ws/2";
 const ITUNES_SEARCH = "https://itunes.apple.com/search";
 
 // MusicBrainz requires a descriptive User-Agent identifying the application.
-const USER_AGENT = "Watchtower/0.1 ( https://watchtower-web-nu.vercel.app )";
+const USER_AGENT = "Alertings/0.1 ( https://alertings.app )";
 
 // MusicBrainz asks for at most one request per second.
 const MIN_REQUEST_GAP_MS = 1100;
