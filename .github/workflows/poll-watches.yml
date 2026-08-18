@@ -26,7 +26,7 @@ jobs:
           # drops the Authorization header across a host change, so a redirect here
           # silently costs us the CRON_SECRET. Check with `curl -sI` after any
           # domain change in Vercel.
-          POLL_URL: https://www.alertings.app/api/cron/poll
+          POLL_URL: https://alertings.app/api/cron/poll
         run: |
           if [ -z "$CRON_SECRET" ]; then
             echo "::error::CRON_SECRET repository secret is not set — the poll would 401."
