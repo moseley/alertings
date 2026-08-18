@@ -22,7 +22,11 @@ jobs:
       - name: Trigger watcher engine
         env:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
-          POLL_URL: https://alertings.app/api/cron/poll
+          # Must be the host that SERVES the app, not one that redirects to it: curl
+          # drops the Authorization header across a host change, so a redirect here
+          # silently costs us the CRON_SECRET. Check with `curl -sI` after any
+          # domain change in Vercel.
+          POLL_URL: https://www.alertings.app/api/cron/poll
         run: |
           if [ -z "$CRON_SECRET" ]; then
             echo "::error::CRON_SECRET repository secret is not set — the poll would 401."
@@ -38,10 +42,17 @@ jobs:
           cat response.json
           echo
 
-          if [ "$code" != "200" ]; then
-            echo "::error::Poll failed with HTTP $code"
-            exit 1
-          fi
+          case "$code" in
+            3??)
+              echo "::error::POLL_URL redirected (HTTP $code) — point it at the canonical host. Following the redirect is not a fix: curl strips Authorization across hosts, so the poll would 401."
+              exit 1
+              ;;
+            200) ;;
+            *)
+              echo "::error::Poll failed with HTTP $code"
+              exit 1
+              ;;
+          esac
 
           # A 200 that reports engine errors still deserves a visible warning.
           if grep -q '"errors":\[[^]]' response.json; then

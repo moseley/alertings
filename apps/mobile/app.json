@@ -42,7 +42,10 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "apiUrl": "https://alertings.app"
+      "apiUrl": "https://alertings.app",
+      "eas": {
+        "projectId": "ba9ed3fb-11a5-48f1-b969-006c3e7d1056"
+      }
     },
     "owner": "moseley"
   }

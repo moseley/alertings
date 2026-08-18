@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "777577727220",
-    "project_id": "watchtower-f40dc",
-    "storage_bucket": "watchtower-f40dc.firebasestorage.app"
+    "project_number": "746171624565",
+    "project_id": "alertings",
+    "storage_bucket": "alertings.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:777577727220:android:7028b1a5e4deb902a68aa1",
+        "mobilesdk_app_id": "1:746171624565:android:4edda21db09b5705641c3c",
         "android_client_info": {
-          "package_name": "com.watchtower.app"
+          "package_name": "app.alertings"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDLKOWTDo4O-wC4cKFUCDinjcNlrUbwfSk"
+          "current_key": "AIzaSyCwx6bkx1DAtABJCp2G0VcAtPHK2gB1hio"
         }
       ],
       "services": {
