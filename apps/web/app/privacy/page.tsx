@@ -9,11 +9,11 @@ export const metadata: Metadata = {
 
 // NOTE: this describes what the code actually does today, but it is a legal
 // statement about your app — read it and adjust the wording before relying on
-// it. The contact address below MUST be filled in: Apple requires a working
-// way for users to reach you about their data.
-const CONTACT_EMAIL = "REPLACE_WITH_YOUR_SUPPORT_EMAIL";
+// it. Apple requires a working way for users to reach you about their data, so
+// this address has to stay monitored, not just resolve.
+const CONTACT_EMAIL = "support@alertings.app";
 
-const LAST_UPDATED = "31 July 2026";
+const LAST_UPDATED = "18 August 2026";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -45,21 +45,21 @@ export default function PrivacyPage() {
         <Section title="What is collected">
           <ul className="list-disc space-y-2 pl-5">
             <li>
-              <strong className="text-white">A notification address.</strong> On a phone this is
+              <strong className="text-ink">A notification address.</strong> On a phone this is
               an Expo push token; in a browser it is a Web Push subscription. It identifies where
               to send alerts, not who you are.
             </li>
             <li>
-              <strong className="text-white">The watches you create.</strong> For weather this
+              <strong className="text-ink">The watches you create.</strong> For weather this
               includes the coordinates and label of the location you pick, and your threshold. For
               music it is the artist you selected.
             </li>
             <li>
-              <strong className="text-white">Alerts that have been sent to you</strong> — the
+              <strong className="text-ink">Alerts that have been sent to you</strong> — the
               text, the time, and whether delivery succeeded — so the app can show your history.
             </li>
             <li>
-              <strong className="text-white">Your platform</strong> (iOS, Android, or web).
+              <strong className="text-ink">Your platform</strong> (iOS, Android, or web).
             </li>
           </ul>
           <p>
@@ -81,27 +81,27 @@ export default function PrivacyPage() {
           <p>These services receive data because they are needed to make the app work:</p>
           <ul className="list-disc space-y-2 pl-5">
             <li>
-              <strong className="text-white">Open-Meteo</strong> — receives the coordinates of a
+              <strong className="text-ink">Open-Meteo</strong> — receives the coordinates of a
               weather watch to return a forecast, and place names you search for.
             </li>
             <li>
-              <strong className="text-white">BigDataCloud</strong> — receives coordinates to turn
+              <strong className="text-ink">BigDataCloud</strong> — receives coordinates to turn
               them into a place name when you use the location button.
             </li>
             <li>
-              <strong className="text-white">MusicBrainz</strong> — receives artist names you
+              <strong className="text-ink">MusicBrainz</strong> — receives artist names you
               search for and the artists you watch.
             </li>
             <li>
-              <strong className="text-white">TMDB</strong> — receives names you search for and the
+              <strong className="text-ink">TMDB</strong> — receives names you search for and the
               people you watch, to check their film and television credits.
             </li>
             <li>
-              <strong className="text-white">Expo, Apple (APNs), and Google (FCM)</strong> —
+              <strong className="text-ink">Expo, Apple (APNs), and Google (FCM)</strong> —
               deliver push notifications to your device.
             </li>
             <li>
-              <strong className="text-white">Vercel and Neon</strong> — host the service and store
+              <strong className="text-ink">Vercel and Neon</strong> — host the service and store
               its database.
             </li>
           </ul>
@@ -116,7 +116,9 @@ export default function PrivacyPage() {
           </p>
           <p>
             To have everything associated with your device removed, email{" "}
-            <span className="font-mono text-blue-400">{CONTACT_EMAIL}</span> and it will be
+            <a href={`mailto:${CONTACT_EMAIL}`} className="font-mono text-accent underline">
+              {CONTACT_EMAIL}
+            </a> and it will be
             deleted.
           </p>
         </Section>
@@ -138,7 +140,9 @@ export default function PrivacyPage() {
         <Section title="Contact">
           <p>
             Questions about privacy or your data:{" "}
-            <span className="font-mono text-blue-400">{CONTACT_EMAIL}</span>
+            <a href={`mailto:${CONTACT_EMAIL}`} className="font-mono text-accent underline">
+              {CONTACT_EMAIL}
+            </a>
           </p>
         </Section>
 
@@ -147,32 +151,32 @@ export default function PrivacyPage() {
           <ul className="list-disc space-y-2 pl-5">
             <li>
               Weather and geocoding by{" "}
-              <a className="text-blue-400 hover:underline" href="https://open-meteo.com/">
+              <a className="text-accent hover:underline" href="https://open-meteo.com/">
                 Open-Meteo
               </a>{" "}
               (CC BY 4.0)
             </li>
             <li>
               Music metadata by{" "}
-              <a className="text-blue-400 hover:underline" href="https://musicbrainz.org/">
+              <a className="text-accent hover:underline" href="https://musicbrainz.org/">
                 MusicBrainz
               </a>
             </li>
             <li>
               Reverse geocoding by{" "}
-              <a className="text-blue-400 hover:underline" href="https://www.bigdatacloud.com/">
+              <a className="text-accent hover:underline" href="https://www.bigdatacloud.com/">
                 BigDataCloud
               </a>
             </li>
             <li>
               Album artwork and store links from the{" "}
-              <a className="text-blue-400 hover:underline" href="https://www.apple.com/itunes/">
+              <a className="text-accent hover:underline" href="https://www.apple.com/itunes/">
                 iTunes Search API
               </a>
             </li>
             <li>
               Film and television data by{" "}
-              <a className="text-blue-400 hover:underline" href="https://www.themoviedb.org/">
+              <a className="text-accent hover:underline" href="https://www.themoviedb.org/">
                 TMDB
               </a>{" "}
               — this product uses the TMDB API but is not endorsed or certified by TMDB
