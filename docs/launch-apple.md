@@ -147,8 +147,13 @@ Required for the current device sizes (verify in App Store Connect, the set
 changes):
 
 - [ ] 6.9" / 6.7" iPhone
-- [ ] iPad — **required because `supportsTablet: true`**. Either provide them or
-      set `supportsTablet: false` and ship iPhone-only.
+- [x] ~~iPad~~ — not required: `supportsTablet: false` as of 2026-09-21. Checked
+      on a 13" simulator; the phone layout stretched badly (full-width buttons,
+      unreadable line lengths) because there is no responsive handling in the
+      mobile app at all — no `useWindowDimensions`, no `maxWidth`, no tablet
+      branch. iPhone-only renders in iPad compatibility mode instead, which
+      looks correct. Revisit only with a real tablet layout: a centred
+      max-width container, a capped sheet width, a multi-column card grid.
 
 Show real content: a populated alert list, the builder mid-configuration, and
 history. Avoid empty states — see §6 for why that reads as broken.

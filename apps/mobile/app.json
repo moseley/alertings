@@ -17,7 +17,7 @@
       "expo-font"
     ],
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "app.alertings",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
