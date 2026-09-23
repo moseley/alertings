@@ -31,7 +31,7 @@ export function WatchCard({
   onDelete: (id: string) => void;
   onEdit: (watch: WatchRow) => void;
 }) {
-  const { firing, value, delta, fill } = describeWatch(watch, current);
+  const { firing, value, delta, fill, caption } = describeWatch(watch, current);
   // Only weather has something to plot; the other two lead with imagery.
   const media = watch.source !== "weather";
   const Icon = watchIcon(watch.source, watch.config.rule?.metric);
@@ -81,7 +81,7 @@ export function WatchCard({
             </Text>
             {media && (
               <Text style={styles.caption} numberOfLines={1}>
-                {value ? `${value} ${delta}` : delta}
+                {caption ?? delta}
               </Text>
             )}
           </View>
@@ -132,8 +132,8 @@ const styles = StyleSheet.create({
   identity: { flexDirection: "row", alignItems: "center", gap: 10, flex: 1, minWidth: 0 },
   identityText: { flex: 1, minWidth: 0 },
   cover: {
-    width: 68,
-    height: 68,
+    width: 60,
+    height: 60,
     borderRadius: 12,
     backgroundColor: colors.neutralBar,
   },

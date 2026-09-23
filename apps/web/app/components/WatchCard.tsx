@@ -27,7 +27,7 @@ export function WatchCard({
   onDelete: (id: string) => void;
   onEdit: (watch: WatchRow) => void;
 }) {
-  const { firing, value, delta, fill } = describeWatch(watch, current);
+  const { firing, value, delta, fill, caption } = describeWatch(watch, current);
   const Icon = watchIcon(watch.source, watch.config.rule?.metric);
   const image = watchImageUrl(watch);
   const storeUrl = watchStoreUrl(watch);
@@ -37,7 +37,13 @@ export function WatchCard({
   const media = watch.source !== "weather";
 
   return (
-    <article className="relative flex flex-col gap-3.5 rounded-card border border-hairline bg-surface p-[18px] shadow-card transition-colors hover:border-hairline-strong focus-within:border-accent">
+    <article
+      className={`relative flex flex-col gap-3.5 rounded-card border border-hairline bg-surface p-[18px] shadow-card transition-colors hover:border-hairline-strong focus-within:border-accent ${
+        // Grid rows stretch to the tallest card, so an artwork card beside a
+        // weather one pools all its slack at the bottom and looks unfinished.
+        media ? "justify-center" : ""
+      }`}
+    >
       {/* The whole card opens the editor. A stretched transparent button keeps
           that a real, keyboard-reachable control without nesting the delete
           button inside it, which would be invalid and swallow its clicks. */}
@@ -67,10 +73,10 @@ export function WatchCard({
               <img
                 src={image}
                 alt=""
-                width={media ? 68 : 32}
-                height={media ? 68 : 32}
+                width={media ? 60 : 32}
+                height={media ? 60 : 32}
                 loading="lazy"
-                className={`rounded-[12px] object-cover ${media ? "h-[68px] w-[68px]" : "h-8 w-8 rounded-[9px]"}`}
+                className={`rounded-[12px] object-cover ${media ? "h-[60px] w-[60px]" : "h-8 w-8 rounded-[9px]"}`}
               />
             </a>
           ) : (
@@ -82,9 +88,7 @@ export function WatchCard({
             </span>
             <span className="truncate text-[12.5px] text-muted">{describeRule(watch)}</span>
             {media && (
-              <span className="truncate text-[12px] text-faint mt-1">
-                {value ? `${value} ${delta}` : delta}
-              </span>
+              <span className="mt-1 truncate text-[12px] text-faint">{caption ?? delta}</span>
             )}
           </div>
         </div>

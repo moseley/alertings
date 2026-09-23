@@ -1,4 +1,4 @@
-import { noticeLabel, tmdbImageUrl } from "@alertings/types";
+import { tmdbImageUrl } from "@alertings/types";
 import type { WatchRow } from "./types";
 
 const DAY_MS = 86_400_000;
@@ -22,12 +22,10 @@ const METRIC_LABEL: Record<string, string> = {
 
 export function describeRule(w: WatchRow): string {
   if (w.source === "music") {
-    return w.config.includeSingles ? "new albums, EPs & singles" : "new albums & EPs";
+    return w.config.includeSingles ? "Albums, EPs & singles" : "Albums & EPs";
   }
   if (w.source === "screen") {
-    return w.config.includeMinorCredits
-      ? "any new credit"
-      : "new films & series";
+    return w.config.includeMinorCredits ? "All credits" : "Films & series";
   }
   const rule = w.config.rule;
   if (!rule) return "";
@@ -37,8 +35,9 @@ export function describeRule(w: WatchRow): string {
       : rule.metric === "precipitation_probability"
         ? "%"
         : ` ${rule.unit ?? "mph"}`;
-  // The notice setting is otherwise invisible once a watch exists.
-  const notice = rule.withinHours ? ` · ${noticeLabel(rule.withinHours)} notice` : "";
+  // The notice is a setting, visible when editing. On a two-across card it
+  // pushed the threshold — the only part worth reading — off the end.
+  const notice = "";
   return `${METRIC_LABEL[rule.metric ?? ""] ?? rule.metric} ${rule.comparator} ${rule.threshold}${suffix}${notice}`;
 }
 
@@ -97,6 +96,8 @@ export interface WatchDisplay {
   value: string | null;
   /** The line to the right of the number. */
   delta: string;
+  /** Ready-made line for artwork-led cards, already short enough to fit. */
+  caption?: string;
   /** 0–1 position for the threshold bar. */
   fill: number;
 }
@@ -131,12 +132,14 @@ export function describeWatch(w: WatchRow, current?: number): WatchDisplay {
     if (since === null) return { firing, value: null, delta: "no activity yet", fill: 0 };
 
     const days = Math.max(0, Math.floor((Date.now() - since) / DAY_MS));
-    const noun = w.source === "screen" ? "since last credit" : "since last release";
-    const delta = matchedAt || recorded !== null ? noun : "since you started watching";
+    const thing = w.source === "screen" ? "credit" : "release";
+    const known = matchedAt || recorded !== null;
+    const delta = known ? `since last ${thing}` : "since you started watching";
     return {
       firing,
       value: `${days}d`,
       delta,
+      caption: known ? `Last ${thing} ${days}d ago` : `Watching ${days}d`,
       fill: 0, // no numeric threshold — the spec leaves this track empty
     };
   }
