@@ -38,11 +38,7 @@ export function WatchCard({
 
   return (
     <article
-      className={`relative flex flex-col gap-3.5 rounded-card border border-hairline bg-surface p-[18px] shadow-card transition-colors hover:border-hairline-strong focus-within:border-accent ${
-        // Grid rows stretch to the tallest card, so an artwork card beside a
-        // weather one pools all its slack at the bottom and looks unfinished.
-        media ? "justify-center" : ""
-      }`}
+      className="relative flex flex-col gap-3.5 rounded-card border border-hairline bg-surface p-[18px] shadow-card transition-colors hover:border-hairline-strong focus-within:border-accent"
     >
       {/* The whole card opens the editor. A stretched transparent button keeps
           that a real, keyboard-reachable control without nesting the delete
@@ -85,10 +81,10 @@ export function WatchCard({
               <img
                 src={image}
                 alt=""
-                width={media ? 60 : 32}
-                height={media ? 60 : 32}
+                width={media ? 118 : 32}
+                height={media ? 118 : 32}
                 loading="lazy"
-                className={`rounded-[12px] object-cover ${media ? "h-[60px] w-[60px]" : "h-8 w-8 rounded-[9px]"}`}
+                className={`rounded-[12px] object-cover ${media ? "h-[118px] w-[118px]" : "h-8 w-8 rounded-[9px]"}`}
               />
             </a>
           ) : (

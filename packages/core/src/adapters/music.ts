@@ -71,6 +71,15 @@ async function mbFetch(
  * Best-effort artwork and store link from iTunes. Never blocks an alert —
  * detection is MusicBrainz's job; this only decorates the result.
  */
+/** Fold case, accents and punctuation so "Bad Bunny" matches "BAD BUNNY". */
+function normaliseArtist(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]/g, "");
+}
+
 async function enrich(
   artistName: string,
   title: string,
@@ -78,12 +87,21 @@ async function enrich(
 ): Promise<{ artworkUrl?: string; storeUrl?: string }> {
   try {
     const term = encodeURIComponent(`${artistName} ${title}`);
-    const res = await fetchImpl(`${ITUNES_SEARCH}?term=${term}&entity=album&limit=1`);
+    const res = await fetchImpl(`${ITUNES_SEARCH}?term=${term}&entity=album&limit=10`);
     if (!res.ok) return {};
     const json = (await res.json()) as {
-      results?: { artworkUrl100?: string; collectionViewUrl?: string }[];
+      results?: { artistName?: string; artworkUrl100?: string; collectionViewUrl?: string }[];
     };
-    const hit = json.results?.[0];
+    // iTunes ranks on the whole phrase, so a same-named release by someone
+    // else can outrank the real one — searching "Bad Bunny ALAMBRE PúA"
+    // returned a single of that name by an unrelated artist. Taking results[0]
+    // meant showing the wrong sleeve and linking to the wrong release, which
+    // is worse than showing no artwork at all. Insist the artist matches.
+    const want = normaliseArtist(artistName);
+    const results = json.results ?? [];
+    const hit =
+      results.find((r) => normaliseArtist(r.artistName ?? "") === want) ??
+      results.find((r) => normaliseArtist(r.artistName ?? "").includes(want));
     if (!hit) return {};
     return {
       // iTunes serves any size by swapping the dimensions in the path.

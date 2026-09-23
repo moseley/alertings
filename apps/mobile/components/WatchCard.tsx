@@ -132,8 +132,8 @@ const styles = StyleSheet.create({
   identity: { flexDirection: "row", alignItems: "center", gap: 10, flex: 1, minWidth: 0 },
   identityText: { flex: 1, minWidth: 0 },
   cover: {
-    width: 60,
-    height: 60,
+    width: 96,
+    height: 96,
     borderRadius: 12,
     backgroundColor: colors.neutralBar,
   },
