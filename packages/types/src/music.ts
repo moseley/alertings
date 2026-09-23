@@ -26,6 +26,12 @@ export const LatestReleaseSchema = z.object({
    * pick the wrong act than a bare name lookup.
    */
   artworkUrl: z.string().optional(),
+  /**
+   * The iTunes page for this release. Apple's terms require artwork to sit
+   * beside a link to where the release can be bought, so wherever the sleeve
+   * is shown this must travel with it.
+   */
+  storeUrl: z.string().optional(),
 });
 export type LatestRelease = z.infer<typeof LatestReleaseSchema>;
 

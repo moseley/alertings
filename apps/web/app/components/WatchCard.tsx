@@ -3,7 +3,13 @@
 import { Trash2, watchIcon } from "./icons";
 import { IconChip, StatusBadge, ThresholdBar } from "./primitives";
 import type { WatchRow } from "./types";
-import { describeRule, describeWatch, watchImageUrl, watchTitle } from "./watch-display";
+import {
+  describeRule,
+  describeWatch,
+  watchImageUrl,
+  watchStoreUrl,
+  watchTitle,
+} from "./watch-display";
 
 /**
  * Leads with the current value against the threshold, per the Atlas spec.
@@ -24,6 +30,7 @@ export function WatchCard({
   const { firing, value, delta, fill } = describeWatch(watch, current);
   const Icon = watchIcon(watch.source, watch.config.rule?.metric);
   const image = watchImageUrl(watch);
+  const storeUrl = watchStoreUrl(watch);
 
   return (
     <article className="relative flex flex-col gap-3.5 rounded-card border border-hairline bg-surface p-[18px] shadow-card transition-colors hover:border-hairline-strong focus-within:border-accent">
@@ -39,16 +46,29 @@ export function WatchCard({
       <header className="pointer-events-none relative z-10 flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2.5">
           {image ? (
-            // Decorative: the title beside it already names the watch.
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={image}
-              alt=""
-              width={32}
-              height={32}
-              loading="lazy"
-              className="h-8 w-8 shrink-0 rounded-[9px] object-cover"
-            />
+            // Apple requires iTunes artwork to link to where the release can be
+            // bought. The header is pointer-events-none so clicks fall through
+            // to the stretched edit button, so this opts back in above it.
+            <a
+              href={storeUrl ?? undefined}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Open ${watchTitle(watch)} in Apple Music`}
+              className={`relative z-20 shrink-0 rounded-[9px] ${
+                storeUrl ? "pointer-events-auto" : "pointer-events-none"
+              }`}
+            >
+              {/* Decorative: the link label and the title beside it both name it. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={image}
+                alt=""
+                width={32}
+                height={32}
+                loading="lazy"
+                className="h-8 w-8 rounded-[9px] object-cover"
+              />
+            </a>
           ) : (
             <IconChip icon={Icon} active={firing} />
           )}

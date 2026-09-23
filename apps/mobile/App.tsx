@@ -30,6 +30,7 @@ import {
 } from "react-native";
 import { Logo } from "./components/Logo";
 import { TabBar, type ListView } from "./components/TabBar";
+import { TmdbLogo } from "./components/TmdbLogo";
 import { WatchCard } from "./components/WatchCard";
 import {
   AudioLines,
@@ -98,6 +99,11 @@ const DEFAULT_THRESHOLD: Record<TempUnit, string> = { F: "85", C: "29" };
  * Default notice per metric. Heat is something you react to within hours;
  * rain is something you plan a day around.
  */
+/** Used repeatedly by the credits block, which is all links. */
+const openUrl = (url: string) => {
+  void Linking.openURL(url);
+};
+
 const DEFAULT_NOTICE: Record<Metric, number> = {
   temperature: 4,
   precipitation_probability: 24,
@@ -908,13 +914,54 @@ export default function App() {
                 Watches are checked every ~15 minutes. Web and mobile keep separate watch lists
                 until accounts arrive.
               </Text>
+              {/*
+                * CC BY 4.0 asks for four things: credit Open-Meteo, link to them,
+                * link to the licence, and state whether the data was changed. A
+                * bare name satisfied none of them.
+                */}
               <Text style={styles.credits}>
-                Weather by Open-Meteo · Music data by MusicBrainz · Reverse geocoding by
-                BigDataCloud · Film & TV data by TMDB
+                Weather data by{" "}
+                <Text
+                  style={styles.creditLink}
+                  onPress={() => openUrl("https://open-meteo.com/")}
+                >
+                  Open-Meteo.com
+                </Text>
+                , licensed{" "}
+                <Text
+                  style={styles.creditLink}
+                  onPress={() => openUrl("https://creativecommons.org/licenses/by/4.0/")}
+                >
+                  CC BY 4.0
+                </Text>
+                . Forecasts are converted between °F and °C and summarised into
+                the wording used in alerts.
               </Text>
-              {/* TMDB's terms require stating this explicitly. */}
               <Text style={styles.credits}>
-                This product uses the TMDB API but is not endorsed or certified by TMDB.
+                Music data by{" "}
+                <Text
+                  style={styles.creditLink}
+                  onPress={() => openUrl("https://musicbrainz.org/")}
+                >
+                  MusicBrainz
+                </Text>
+                {" · "}Cover art and store links from the iTunes Search API
+                {" · "}Reverse geocoding by{" "}
+                <Text
+                  style={styles.creditLink}
+                  onPress={() => openUrl("https://www.bigdatacloud.com/")}
+                >
+                  BigDataCloud
+                </Text>
+              </Text>
+              {/* TMDB require the logo as well as the wording, inside a credits
+                * section, and less prominent than the app's own mark. */}
+              <View style={styles.tmdbRow}>
+                <TmdbLogo height={15} />
+              </View>
+              <Text style={styles.credits}>
+                Film & TV data by TMDB. This product uses the TMDB API but is not
+                endorsed or certified by TMDB.
               </Text>
               <Text style={styles.link} onPress={() => Linking.openURL(`${API_URL}/privacy`)}>
                 Privacy
@@ -1441,6 +1488,8 @@ const styles = StyleSheet.create({
   panelBody: { fontFamily: fonts.regular, fontSize: 13.5, color: colors.muted, marginTop: 4 },
   panelButton: { marginTop: 14 },
   credits: { fontFamily: fonts.regular, fontSize: 12.5, color: colors.faint, marginTop: 12 },
+  creditLink: { color: colors.accent, textDecorationLine: "underline" },
+  tmdbRow: { marginTop: 14 },
   link: {
     fontFamily: fonts.medium,
     fontSize: 13,

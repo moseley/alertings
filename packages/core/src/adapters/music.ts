@@ -227,6 +227,7 @@ export async function getLatestRelease(
         title: best.title,
         type: best["primary-type"] ?? "Release",
         ...(artwork.artworkUrl ? { artworkUrl: artwork.artworkUrl } : {}),
+        ...(artwork.storeUrl ? { storeUrl: artwork.storeUrl } : {}),
       };
     }
   }

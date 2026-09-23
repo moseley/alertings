@@ -150,11 +150,19 @@ export default function PrivacyPage() {
           <p>Alertings is built on data generously made available by others:</p>
           <ul className="list-disc space-y-2 pl-5">
             <li>
-              Weather and geocoding by{" "}
+              Weather data by{" "}
               <a className="text-accent hover:underline" href="https://open-meteo.com/">
-                Open-Meteo
-              </a>{" "}
-              (CC BY 4.0)
+                Open-Meteo.com
+              </a>
+              , licensed{" "}
+              <a
+                className="text-accent hover:underline"
+                href="https://creativecommons.org/licenses/by/4.0/"
+              >
+                CC BY 4.0
+              </a>
+              . Forecasts are converted between °F and °C and summarised into the
+              wording used in alerts.
             </li>
             <li>
               Music metadata by{" "}
@@ -180,6 +188,16 @@ export default function PrivacyPage() {
                 TMDB
               </a>{" "}
               — this product uses the TMDB API but is not endorsed or certified by TMDB
+              {/* TMDB require their logo beside the notice, kept smaller than
+                  the Alertings mark. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/tmdb.svg"
+                alt="TMDB"
+                width={92}
+                height={12}
+                className="mt-2 h-3 w-auto"
+              />
             </li>
           </ul>
         </Section>

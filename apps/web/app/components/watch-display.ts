@@ -51,6 +51,16 @@ export function watchImageUrl(w: WatchRow): string | null {
   return null;
 }
 
+/**
+ * Where to buy the release whose sleeve we're showing. Apple's terms require
+ * iTunes artwork to sit beside a link to the store page, so this must be
+ * rendered wherever watchImageUrl() is.
+ */
+export function watchStoreUrl(w: WatchRow): string | null {
+  if (w.source === "music") return w.config.lastRelease?.storeUrl ?? null;
+  return null;
+}
+
 export function watchTitle(w: WatchRow): string {
   if (w.source === "music") return w.config.artist?.name ?? w.label;
   if (w.source === "screen") return w.config.person?.name ?? w.label;

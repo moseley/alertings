@@ -1,9 +1,15 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, Linking, Pressable, StyleSheet, Text, View } from "react-native";
 import type { WatchRow } from "../lib/api";
 import { Trash2, watchIcon } from "./icons";
 import { IconChip, StatusBadge, ThresholdBar } from "./primitives";
 import { cardShadow, colors, fonts, radius } from "./theme";
-import { describeRule, describeWatch, watchImageUrl, watchTitle } from "./watch-display";
+import {
+  describeRule,
+  describeWatch,
+  watchImageUrl,
+  watchStoreUrl,
+  watchTitle,
+} from "./watch-display";
 
 /**
  * Leads with the current value against the threshold, per the Atlas spec.
@@ -24,6 +30,7 @@ export function WatchCard({
   const { firing, value, delta, fill } = describeWatch(watch, current);
   const Icon = watchIcon(watch.source, watch.config.rule?.metric);
   const image = watchImageUrl(watch);
+  const storeUrl = watchStoreUrl(watch);
 
   return (
     // Tapping the card opens the editor; the delete button stops the press
@@ -37,7 +44,25 @@ export function WatchCard({
       <View style={styles.header}>
         <View style={styles.identity}>
           {image ? (
-            <Image source={{ uri: image }} style={styles.image} accessibilityIgnoresInvertColors />
+            // Apple requires iTunes artwork to link to where the release can be
+            // bought, so the sleeve opens the store rather than the editor.
+            // Same stopPropagation dance as delete, for the same reason.
+            <Pressable
+              accessibilityRole="link"
+              accessibilityLabel={`Open ${watchTitle(watch)} in Apple Music`}
+              disabled={!storeUrl}
+              onPress={(e) => {
+                e.stopPropagation();
+                if (storeUrl) void Linking.openURL(storeUrl);
+              }}
+              hitSlop={4}
+            >
+              <Image
+                source={{ uri: image }}
+                style={styles.image}
+                accessibilityIgnoresInvertColors
+              />
+            </Pressable>
           ) : (
             <IconChip icon={Icon} active={firing} />
           )}
