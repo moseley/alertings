@@ -847,7 +847,13 @@ export default function App() {
             ) : (
               <View style={styles.cardList}>
                 {visibleWatches.map((w) => (
-                  <WatchCard key={w.id} watch={w} onDelete={onDelete} onEdit={openEditor} />
+                  <WatchCard
+                    key={w.id}
+                    watch={w}
+                    current={w.lastValue ?? undefined}
+                    onDelete={onDelete}
+                    onEdit={openEditor}
+                  />
                 ))}
               </View>
             )}

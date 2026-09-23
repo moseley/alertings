@@ -31,6 +31,10 @@ export function WatchCard({
   const Icon = watchIcon(watch.source, watch.config.rule?.metric);
   const image = watchImageUrl(watch);
   const storeUrl = watchStoreUrl(watch);
+  // Only weather has a number worth plotting. Music and film led with a
+  // meaningless day count above a permanently empty bar; they lead with the
+  // artwork instead. Mirrors apps/mobile/components/WatchCard.tsx.
+  const media = watch.source !== "weather";
 
   return (
     <article className="relative flex flex-col gap-3.5 rounded-card border border-hairline bg-surface p-[18px] shadow-card transition-colors hover:border-hairline-strong focus-within:border-accent">
@@ -63,10 +67,10 @@ export function WatchCard({
               <img
                 src={image}
                 alt=""
-                width={32}
-                height={32}
+                width={media ? 68 : 32}
+                height={media ? 68 : 32}
                 loading="lazy"
-                className="h-8 w-8 rounded-[9px] object-cover"
+                className={`rounded-[12px] object-cover ${media ? "h-[68px] w-[68px]" : "h-8 w-8 rounded-[9px]"}`}
               />
             </a>
           ) : (
@@ -77,6 +81,11 @@ export function WatchCard({
               {watchTitle(watch)}
             </span>
             <span className="truncate text-[12.5px] text-muted">{describeRule(watch)}</span>
+            {media && (
+              <span className="truncate text-[12px] text-faint mt-1">
+                {value ? `${value} ${delta}` : delta}
+              </span>
+            )}
           </div>
         </div>
         <div className="pointer-events-auto flex shrink-0 items-center gap-1.5">
@@ -93,17 +102,21 @@ export function WatchCard({
         </div>
       </header>
 
-      <div className="pointer-events-none relative z-10 flex items-end justify-between gap-3">
-        {/* 36px on mobile, 40px from md up, per the type scale. */}
-        <span className="text-[36px] font-bold leading-none tracking-[-.04em] tabular-nums text-ink md:text-[40px]">
-          {value ?? <span className="text-neutral-bar">—</span>}
-        </span>
-        <span className="pb-1 text-right text-[12.5px] text-muted">{delta}</span>
-      </div>
+      {!media && (
+        <>
+          <div className="pointer-events-none relative z-10 flex items-end justify-between gap-3">
+            {/* 36px on mobile, 40px from md up, per the type scale. */}
+            <span className="text-[36px] font-bold leading-none tracking-[-.04em] tabular-nums text-ink md:text-[40px]">
+              {value ?? <span className="text-neutral-bar">—</span>}
+            </span>
+            <span className="pb-1 text-right text-[12.5px] text-muted">{delta}</span>
+          </div>
 
-      <div className="pointer-events-none relative z-10">
-        <ThresholdBar fill={fill} firing={firing} />
-      </div>
+          <div className="pointer-events-none relative z-10">
+            <ThresholdBar fill={fill} firing={firing} />
+          </div>
+        </>
+      )}
     </article>
   );
 }

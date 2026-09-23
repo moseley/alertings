@@ -12,9 +12,13 @@ import {
 } from "./watch-display";
 
 /**
- * Leads with the current value against the threshold, per the Atlas spec.
- * `current` is optional: with no reading available the card keeps its shape
- * and shows an honest blank rather than a stand-in number.
+ * Two layouts, because the sources genuinely differ.
+ *
+ * Weather has a number worth plotting, so it keeps the Atlas shape: big
+ * current reading against a threshold bar. Music and film have no numeric
+ * threshold — they used to render a meaningless day count at 36px above a bar
+ * that was hardcoded empty — so they lead with the artwork instead and demote
+ * the day count to a caption.
  */
 export function WatchCard({
   watch,
@@ -28,6 +32,8 @@ export function WatchCard({
   onEdit: (watch: WatchRow) => void;
 }) {
   const { firing, value, delta, fill } = describeWatch(watch, current);
+  // Only weather has something to plot; the other two lead with imagery.
+  const media = watch.source !== "weather";
   const Icon = watchIcon(watch.source, watch.config.rule?.metric);
   const image = watchImageUrl(watch);
   const storeUrl = watchStoreUrl(watch);
@@ -59,7 +65,7 @@ export function WatchCard({
             >
               <Image
                 source={{ uri: image }}
-                style={styles.image}
+                style={media ? styles.cover : styles.image}
                 accessibilityIgnoresInvertColors
               />
             </Pressable>
@@ -73,6 +79,11 @@ export function WatchCard({
             <Text style={styles.subtitle} numberOfLines={1}>
               {describeRule(watch)}
             </Text>
+            {media && (
+              <Text style={styles.caption} numberOfLines={1}>
+                {value ? `${value} ${delta}` : delta}
+              </Text>
+            )}
           </View>
         </View>
         <View style={styles.headerRight}>
@@ -94,12 +105,15 @@ export function WatchCard({
         </View>
       </View>
 
-      <View style={styles.valueRow}>
-        <Text style={[styles.value, !value && styles.valueEmpty]}>{value ?? "—"}</Text>
-        <Text style={styles.delta}>{delta}</Text>
-      </View>
-
-      <ThresholdBar fill={fill} firing={firing} />
+      {!media && (
+        <>
+          <View style={styles.valueRow}>
+            <Text style={[styles.value, !value && styles.valueEmpty]}>{value ?? "—"}</Text>
+            <Text style={styles.delta}>{delta}</Text>
+          </View>
+          <ThresholdBar fill={fill} firing={firing} />
+        </>
+      )}
     </Pressable>
   );
 }
@@ -117,6 +131,13 @@ const styles = StyleSheet.create({
   header: { flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between", gap: 12 },
   identity: { flexDirection: "row", alignItems: "center", gap: 10, flex: 1, minWidth: 0 },
   identityText: { flex: 1, minWidth: 0 },
+  cover: {
+    width: 68,
+    height: 68,
+    borderRadius: 12,
+    backgroundColor: colors.neutralBar,
+  },
+  caption: { fontFamily: fonts.regular, fontSize: 12, color: colors.faint, marginTop: 4 },
   image: {
     width: 34,
     height: 34,

@@ -231,7 +231,7 @@ export const screenAdapter: SourceAdapter<ScreenWatchConfig> = {
       });
     }
 
-    return matches;
+    return { matches };
   },
 };
 

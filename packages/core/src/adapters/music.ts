@@ -159,7 +159,7 @@ export const musicAdapter: SourceAdapter<MusicWatchConfig> = {
         },
       });
     }
-    return matches;
+    return { matches };
   },
 };
 

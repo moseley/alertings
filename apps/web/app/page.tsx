@@ -785,7 +785,13 @@ export default function Home() {
             ) : (
               <div className="grid grid-cols-1 gap-3.5 md:grid-cols-2 xl:grid-cols-3">
                 {visibleWatches.map((w) => (
-                  <WatchCard key={w.id} watch={w} onDelete={onDelete} onEdit={openEditor} />
+                  <WatchCard
+                    key={w.id}
+                    watch={w}
+                    current={w.lastValue ?? undefined}
+                    onDelete={onDelete}
+                    onEdit={openEditor}
+                  />
                 ))}
               </div>
             )}

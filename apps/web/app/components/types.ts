@@ -28,6 +28,8 @@ export interface WatchRow {
   createdAt?: string;
   lastCheckedAt?: string | null;
   lastMatchedAt?: string | null;
+  /** Most recent observed value. Weather only; event sources have none. */
+  lastValue?: number | null;
 }
 
 export interface NotificationRow {

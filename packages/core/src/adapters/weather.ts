@@ -4,7 +4,7 @@ import {
   type WeatherRule,
   type WeatherWatchConfig,
 } from "@alertings/types";
-import type { AdapterContext, SourceAdapter, WatcherMatch } from "./types";
+import type { AdapterContext, EvaluationResult, SourceAdapter, WatcherMatch } from "./types";
 
 const OPEN_METEO = "https://api.open-meteo.com/v1/forecast";
 
@@ -36,7 +36,7 @@ export const weatherAdapter: SourceAdapter<WeatherWatchConfig> = {
     }
     const json = (await res.json()) as OpenMeteoResponse;
     const hourly = json.hourly;
-    if (!hourly?.time) return [];
+    if (!hourly?.time) return { matches: [] };
     const offset = json.utc_offset_seconds ?? 0;
     return evaluateRule(rule, hourly, ctx.now, offset, location);
   },
@@ -86,12 +86,16 @@ function evaluateRule(
   now: Date,
   offsetSeconds: number,
   location: Location,
-): WatcherMatch[] {
+): EvaluationResult {
   const series = seriesFor(rule, hourly);
-  if (!series) return [];
+  if (!series) return { matches: [] };
 
   const nowMs = now.getTime();
   const horizonMs = nowMs + rule.withinHours * 3_600_000;
+  // The first hour at or after now is what the card shows as the current
+  // reading. Captured whether or not anything matches, so a quiet watch still
+  // displays a live number instead of a dash.
+  let reading: number | undefined;
 
   for (let i = 0; i < hourly.time.length; i++) {
     const localIso = hourly.time[i];
@@ -101,13 +105,18 @@ function evaluateRule(
     // Open-Meteo times are local wall-clock (timezone=auto). Convert to a true
     // UTC instant using the reported offset so the window compares correctly.
     const utcMs = Date.parse(`${localIso}:00Z`) - offsetSeconds * 1000;
-    if (Number.isNaN(utcMs) || utcMs < nowMs || utcMs > horizonMs) continue;
+    if (Number.isNaN(utcMs) || utcMs < nowMs) continue;
+    if (reading === undefined) reading = value;
+    if (utcMs > horizonMs) continue;
 
     if (meets(rule, value)) {
-      return [buildMatch(rule, value, localIso, location, now, offsetSeconds)];
+      return {
+        matches: [buildMatch(rule, value, localIso, location, now, offsetSeconds)],
+        ...(reading !== undefined ? { reading } : {}),
+      };
     }
   }
-  return [];
+  return { matches: [], ...(reading !== undefined ? { reading } : {}) };
 }
 
 const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];

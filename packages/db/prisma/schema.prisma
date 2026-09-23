@@ -52,6 +52,11 @@ model Watch {
   enabled       Boolean   @default(true)
   lastCheckedAt DateTime?
   lastMatchedAt DateTime?
+  /// Most recent observed value, so a card can show live state instead of a
+  /// dash. Only sources with something numeric to plot set it — weather does,
+  /// music and film do not.
+  lastValue     Float?
+  lastValueAt   DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 

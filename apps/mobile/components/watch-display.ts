@@ -13,6 +13,13 @@ export function timeAgo(iso: string): string {
 }
 
 /** e.g. "temperature above 85°F", "rain above 60%" */
+/** Short enough to fit one line beside the artwork, threshold included. */
+const METRIC_LABEL: Record<string, string> = {
+  temperature: "Temp",
+  precipitation_probability: "Rain",
+  wind_speed: "Wind",
+};
+
 export function describeRule(w: WatchRow): string {
   if (w.source === "music") {
     return w.config.includeSingles ? "new albums, EPs & singles" : "new albums & EPs";
@@ -30,7 +37,7 @@ export function describeRule(w: WatchRow): string {
         : ` ${rule.unit ?? "mph"}`;
   // The notice setting is otherwise invisible once a watch exists.
   const notice = rule.withinHours ? ` · ${noticeLabel(rule.withinHours)} notice` : "";
-  return `${rule.metric?.replace(/_/g, " ")} ${rule.comparator} ${rule.threshold}${suffix}${notice}`;
+  return `${METRIC_LABEL[rule.metric ?? ""] ?? rule.metric} ${rule.comparator} ${rule.threshold}${suffix}${notice}`;
 }
 
 /**
@@ -40,7 +47,13 @@ export function describeRule(w: WatchRow): string {
  * shows the sleeve of the artist's last release instead. Weather keeps its icon.
  */
 export function watchImageUrl(w: WatchRow): string | null {
-  if (w.source === "music") return w.config.lastRelease?.artworkUrl ?? null;
+  if (w.source === "music") {
+    // Apple allow iTunes artwork only beside a link to where the release can
+    // be bought, so without one we fall back to the icon rather than show it
+    // unlinked. Watches made before storeUrl existed hit this until backfilled.
+    const r = w.config.lastRelease;
+    return r?.artworkUrl && r?.storeUrl ? r.artworkUrl : null;
+  }
   if (w.source === "screen") {
     const path = w.config.person?.profilePath;
     return path ? tmdbImageUrl(path) : null;

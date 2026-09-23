@@ -54,18 +54,26 @@ export async function runWatches(opts: RunOptions): Promise<RunSummary> {
 
     summary.watchesChecked++;
     let found: WatcherMatch[] = [];
+    let reading: number | undefined;
     try {
-      found = await adapter.evaluate(parsed.data, {
+      const result = await adapter.evaluate(parsed.data, {
         now,
         fetch: fetchImpl,
         watchCreatedAt: watch.createdAt,
       });
+      found = result.matches;
+      reading = result.reading;
     } catch (err) {
       summary.errors.push(`evaluate failed for watch ${watch.id}: ${(err as Error).message}`);
     }
     await opts.prisma.watch.update({
       where: { id: watch.id },
-      data: { lastCheckedAt: now },
+      data: {
+        lastCheckedAt: now,
+        // Absent on a failed evaluation, so a stale-but-real number survives a
+        // transient upstream error rather than blanking the card.
+        ...(reading !== undefined ? { lastValue: reading, lastValueAt: now } : {}),
+      },
     });
 
     for (const match of found) {

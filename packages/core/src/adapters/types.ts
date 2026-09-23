@@ -12,6 +12,21 @@ export interface WatcherMatch {
   data?: Record<string, unknown>;
 }
 
+/**
+ * What one evaluation produced. Kept as a single return so an adapter never
+ * has to fetch twice: the reading a card displays comes out of the same
+ * response that decided whether to alert, which matters on rate-limited
+ * free tiers.
+ */
+export interface EvaluationResult {
+  matches: WatcherMatch[];
+  /**
+   * Latest observed value for this watch, when the source has one. Weather
+   * does; event-based sources like music and film have nothing to plot.
+   */
+  reading?: number;
+}
+
 export interface AdapterContext {
   now: Date;
   fetch: typeof fetch;
@@ -30,6 +45,6 @@ export interface AdapterContext {
 export interface SourceAdapter<Config> {
   source: string;
   configSchema: z.ZodType<Config>;
-  /** Fetch current source data and return matches for this config (empty if none). */
-  evaluate(config: Config, ctx: AdapterContext): Promise<WatcherMatch[]>;
+  /** Fetch current source data and report matches plus any current reading. */
+  evaluate(config: Config, ctx: AdapterContext): Promise<EvaluationResult>;
 }
