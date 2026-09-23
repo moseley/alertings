@@ -53,8 +53,20 @@ export function WatchCard({
         aria-label={`Edit alert for ${watchTitle(watch)}`}
         className="absolute inset-0 z-0 rounded-card outline-none"
       />
-      <header className="pointer-events-none relative z-10 flex items-start justify-between gap-3">
-        <div className="flex min-w-0 items-center gap-2.5">
+      <div className="pointer-events-auto absolute right-[18px] top-[18px] z-20 flex items-center gap-1.5">
+        <StatusBadge firing={firing} />
+        <button
+          type="button"
+          onClick={() => onDelete(watch.id)}
+          aria-label={`Delete alert for ${watchTitle(watch)}`}
+          title="Delete alert"
+          className="rounded-[8px] p-1.5 text-faint transition-colors hover:bg-sidebar hover:text-ink"
+        >
+          <Trash2 size={15} />
+        </button>
+      </div>
+
+      <header className="pointer-events-none relative z-10 flex items-start gap-2.5">
           {image ? (
             // Apple requires iTunes artwork to link to where the release can be
             // bought. The header is pointer-events-none so clicks fall through
@@ -83,7 +95,7 @@ export function WatchCard({
             <IconChip icon={Icon} active={firing} />
           )}
           <div className="flex min-w-0 flex-col">
-            <span className="truncate text-[15px] font-semibold text-ink">
+            <span className="truncate pr-[104px] text-[15px] font-semibold text-ink">
               {watchTitle(watch)}
             </span>
             <span className="truncate text-[12.5px] text-muted">{describeRule(watch)}</span>
@@ -91,19 +103,6 @@ export function WatchCard({
               <span className="mt-1 truncate text-[12px] text-faint">{caption ?? delta}</span>
             )}
           </div>
-        </div>
-        <div className="pointer-events-auto flex shrink-0 items-center gap-1.5">
-          <StatusBadge firing={firing} />
-          <button
-            type="button"
-            onClick={() => onDelete(watch.id)}
-            aria-label={`Delete watch for ${watchTitle(watch)}`}
-            title="Delete watch"
-            className="rounded-[8px] p-1.5 text-faint transition-colors hover:bg-sidebar hover:text-ink"
-          >
-            <Trash2 size={15} />
-          </button>
-        </div>
       </header>
 
       {!media && (

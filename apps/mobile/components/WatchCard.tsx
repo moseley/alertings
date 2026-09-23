@@ -47,7 +47,7 @@ export function WatchCard({
       accessibilityRole="button"
       accessibilityLabel={`Edit alert for ${watchTitle(watch)}`}
     >
-      <View style={styles.header}>
+      <View style={styles.header} pointerEvents="box-none">
         <View style={styles.identity}>
           {image ? (
             // Apple requires iTunes artwork to link to where the release can be
@@ -86,7 +86,7 @@ export function WatchCard({
             )}
           </View>
         </View>
-        <View style={styles.headerRight}>
+        <View style={styles.headerRight} pointerEvents="box-none">
           <StatusBadge firing={firing} />
           <Pressable
             accessibilityRole="button"
@@ -144,9 +144,16 @@ const styles = StyleSheet.create({
     borderRadius: radius.chip,
     backgroundColor: colors.chipIdle,
   },
-  title: { fontFamily: fonts.semibold, fontSize: 15, color: colors.ink },
+  title: { fontFamily: fonts.semibold, fontSize: 15, color: colors.ink, paddingRight: 104 },
   subtitle: { fontFamily: fonts.regular, fontSize: 12.5, color: colors.muted, marginTop: 2 },
-  headerRight: { flexDirection: "row", alignItems: "center", gap: 4 },
+  headerRight: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
   delete: { padding: 6 },
 
   valueRow: { flexDirection: "row", alignItems: "flex-end", justifyContent: "space-between", gap: 12 },
