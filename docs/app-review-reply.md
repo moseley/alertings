@@ -125,6 +125,14 @@ data, not a difference in what the app offers or how it behaves.
 
 ## 6. Regulated industries and third-party material
 
+**Alertings is not a commercial project** under the terms of the providers it
+uses. TMDB, whose material is the most substantial third-party content in the
+app, defines a commercial project as one whose *"primary purpose is to create
+revenue for the benefit of the owner"*. Alertings is free, carries no
+advertising, has no in-app purchases or subscriptions, and generates no revenue
+of any kind. It therefore falls squarely within the free, non-commercial use
+their API is offered for, and no commercial licence is required.
+
 **Alertings does not operate in a regulated industry.** It provides no medical,
 financial, legal, gambling, or other regulated service. Weather information is
 presented purely as forecast data for personal planning and is never presented as

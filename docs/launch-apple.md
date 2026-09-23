@@ -13,16 +13,27 @@ consciously accept each one.
 
 | Source | Terms reality |
 | --- | --- |
-| **TMDB** | Free tier is non-commercial. Commercial use needs a licence agreement. Attribution is **mandatory** and already present in the app and privacy page — do not remove it. |
+| **TMDB** | Non-commercial use is free. Their published test is whether *"the primary purpose is to create revenue for the benefit of the owner"* — a free app with no ads or IAP is not, so no licence is needed today. Attribution is **mandatory** and has two parts: the verbatim disclaimer AND the approved TMDB logo, both in an About/Credits section. |
 | **Open-Meteo** | Free for non-commercial use, roughly 10k calls/day. Commercial use needs a paid plan. |
 | **MusicBrainz** | Live server is ~1 request/second, enforced. Heavy or commercial users are expected to run a mirror. |
 | **BigDataCloud** | Free tier is capped; reverse geocoding runs on every GPS prefill. |
 | **iTunes Search** | Apple's, undocumented but roughly 20 calls/minute. |
 
-A free app in a public store is still arguably commercial use for TMDB, and
-"free" does not exempt you from the rate limits. **Decide this before launch,
-not after a takedown.** The polling model multiplies it: every watch hits an
-upstream API on every tick.
+**Corrected 2026-09-23.** An earlier draft of this file claimed a public App
+Store listing was "arguably commercial use" for TMDB. That is the wrong test.
+TMDB measures whether the project's *primary purpose is to create revenue for
+the owner*; Alertings is free with no ads, no IAP and no revenue, so it is
+non-commercial by their own definition. The same reasoning covers Open-Meteo's
+non-commercial tier.
+
+**What remains live is volume, not licensing.** "Free" does not exempt you from
+rate limits, and the polling model multiplies them: every watch hits an upstream
+API on every tick, so usage scales with users × watches × 96 polls/day.
+
+⚠️ **The tripwire is monetisation.** Adding ads, a subscription, or in-app
+purchases flips the project to commercial under TMDB's definition, and a licence
+then has to be in place *before* that ships. Contact is sales@themoviedb.org.
+Revisit this section the day revenue is considered, not after.
 
 ### 0.2 One scheduler, no redundancy
 
